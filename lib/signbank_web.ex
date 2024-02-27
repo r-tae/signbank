@@ -86,6 +86,7 @@ defmodule SignbankWeb do
       # Core UI components and translation
       import SignbankWeb.CoreComponents
       import SignbankWeb.Gettext
+      import LiveSvelte
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
