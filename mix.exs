@@ -49,7 +49,12 @@ defmodule Signbank.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
-      {:live_svelte, "~> 0.13.0"}
+      {:live_svelte, "~> 0.13.0"},
+      # Static code analysis
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      # Detect unsafe migrations
+      {:excellent_migrations, "~> 0.1", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
     ]
   end
 

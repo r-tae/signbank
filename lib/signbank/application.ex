@@ -1,3 +1,4 @@
+# credo:disable-for-this-file Credo.Check.Refactor.ModuleDependencies
 defmodule Signbank.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
