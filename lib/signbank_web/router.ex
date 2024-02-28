@@ -18,6 +18,21 @@ defmodule SignbankWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    # TODO: these routes are only slightly modified from `gen.live`, we don't want most of them
+    live "/dictionary", EntryLive.Index, :index
+    live "/dictionary/new", EntryLive.Index, :new
+    live "/dictionary/:id/edit", EntryLive.Index, :edit
+
+    live "/dictionary/sign/:id", EntryLive.Show, :show
+    live "/dictionary/sign/:id/show/edit", EntryLive.Show, :edit
+
+    # These are routes from the "recreated_signbank" project
+    # live "/dictionary", SignLive.Index, :index
+    # live "/dictionary/edit", SignLive.Edit, :new
+    # live "/dictionary/edit/:id_gloss", SignLive.Edit, :edit
+    # get "/dictionary/sign/:id_gloss", DictionaryController, :entry
+    # get "/dictionary/sign/:id_gloss/detail", DictionaryController, :detail_entry
   end
 
   # Other scopes may use custom stacks.

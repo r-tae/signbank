@@ -1,0 +1,48 @@
+<%!-- TODO: this was from `gen.live`, look over it again --%>
+<.header>
+  Listing Entries
+  <:actions>
+    <.link patch={~p"/entries/new"}>
+      <.button>New Entry</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="entries"
+  rows={@streams.entries}
+  row_click={fn {_id, entry} -> JS.navigate(~p"/entries/#{entry}") end}
+>
+  <:col :let={{_id, entry}} label="id_gloss"><%= entry.id_gloss %></:col>
+  <:col :let={{_id, entry}} label="annotation_id_gloss"><%= entry.annotation_id_gloss %></:col>
+  <:action :let={{_id, entry}}>
+    <div class="sr-only">
+      <.link navigate={~p"/entries/#{entry}"}>Show</.link>
+    </div>
+    <.link patch={~p"/entries/#{entry}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, entry}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: entry.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="entry-modal"
+  show
+  on_cancel={JS.patch(~p"/entries")}
+>
+  <.live_component
+    module={SignbankWeb.EntryLive.FormComponent}
+    id={@entry.id || :new}
+    title={@page_title}
+    action={@live_action}
+    entry={@entry}
+    patch={~p"/entries"}
+  />
+</.modal>

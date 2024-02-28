@@ -16,3 +16,9 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
+
+
+
+## Deployment
+
+Signbank has been developed for the Australian Research Data Common's cloud, [Nectar](https://ardc.edu.au/services/ardc-nectar-research-cloud/). The deployment scripts should work out-of-the-box with any other OpenStack cloud (a popular choice for national research infrastructure, some universities have their own OS cloud as well).
