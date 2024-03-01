@@ -22,7 +22,6 @@ defmodule Signbank.Dictionary.Sign do
     field :compound, :string
     field :hamnosys, :string
 
-
     # TODO: uncomment this after adding %Tag{}/SignTag
     # many_to_many :tags, Dictionary.Tag, join_through: Dictionary.SignTag
 
@@ -51,8 +50,7 @@ defmodule Signbank.Dictionary.Sign do
       foreign_key: :variant_of_id,
       references: :id
 
-    # TODO: uncomment this after adding %Definition{}
-    # has_many :definitions, Dictionary.Definition
+    has_many :definitions, Dictionary.Definition
 
     # TODO: uncomment this after adding %Relation{}
     # has_many :relations, Dictionary.Relation, foreign_key: :sign_a_id
@@ -105,6 +103,7 @@ defmodule Signbank.Dictionary.Sign do
     # |> foreign_key_constraint(:variants, name: :signs_variant_of_fkey)
     |> unique_constraint(:id_gloss)
     |> assoc_constraint(:headsign)
+
     # TODO: uncomment this
     # |> assoc_constraint(:active_video)
   end
@@ -116,8 +115,9 @@ defmodule Signbank.Dictionary.Sign do
       :variant ->
         changeset
         |> guard_field_exists(:variant_of_id, "must be set when type is variant")
-        # TODO: uncomment this
-        # |> guard_field_not_exists(:definitions, "variant cannot have definitions")
+
+      # TODO: uncomment this
+      # |> guard_field_not_exists(:definitions, "variant cannot have definitions")
 
       :headsign ->
         changeset

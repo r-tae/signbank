@@ -51,5 +51,35 @@ Signbank.Repo.insert!(%Signbank.Dictionary.Sign{
   is_bsl_loan: true,
   legacy_sign_number: 1670,
   signed_english_gloss: nil,
-  signed_english_only: false
+  signed_english_only: false,
+  definitions: [
+    %Signbank.Dictionary.Definition{
+      text: "Hello world",
+      pos: 0,
+      role: :general,
+      language: "en",
+      published: true
+    },
+    %Signbank.Dictionary.Definition{
+      text: "This is the second noun definition",
+      pos: 1,
+      role: :noun,
+      language: "en",
+      published: true
+    },
+    %Signbank.Dictionary.Definition{
+      text: "This is the first noun definition",
+      pos: 0,
+      role: :noun,
+      language: "en",
+      published: true
+    },
+    %Signbank.Dictionary.Definition{
+      text: "This is the only verb definition",
+      pos: 0,
+      role: :verb,
+      language: "en",
+      published: true
+    }
+  ]
 })

@@ -41,7 +41,7 @@ defmodule Signbank.Dictionary do
   def get_entry_by_id_gloss!(id_gloss),
     do:
       Repo.get_by!(
-        from(s in Sign, preload: [variants: []]),
+        from(s in Sign, preload: [definitions: [], variants: []]),
         id_gloss: id_gloss
       )
 
@@ -59,7 +59,7 @@ defmodule Signbank.Dictionary do
   """
   def create_entry(attrs \\ %{}) do
     %Sign{}
-    |> Entry.changeset(attrs)
+    |> Sign.changeset(attrs)
     |> Repo.insert()
   end
 

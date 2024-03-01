@@ -2,7 +2,7 @@
 <.header>
   Listing Entries
   <:actions>
-    <.link patch={~p"/entries/new"}>
+    <.link patch={~p"/dictionary/sign/new"}>
       <.button>New Entry</.button>
     </.link>
   </:actions>
@@ -11,15 +11,15 @@
 <.table
   id="entries"
   rows={@streams.entries}
-  row_click={fn {_id, entry} -> JS.navigate(~p"/entries/#{entry}") end}
+  row_click={fn {_id, entry} -> JS.navigate(~p"/dictionary/sign/#{entry.id_gloss}") end}
 >
   <:col :let={{_id, entry}} label="id_gloss"><%= entry.id_gloss %></:col>
   <:col :let={{_id, entry}} label="annotation_id_gloss"><%= entry.annotation_id_gloss %></:col>
   <:action :let={{_id, entry}}>
     <div class="sr-only">
-      <.link navigate={~p"/entries/#{entry}"}>Show</.link>
+      <.link navigate={~p"/dictionary/sign/#{entry.id_gloss}"}>Show</.link>
     </div>
-    <.link patch={~p"/entries/#{entry}/edit"}>Edit</.link>
+    <.link patch={~p"/dictionary/sign/#{entry.id_gloss}/edit"}>Edit</.link>
   </:action>
   <:action :let={{id, entry}}>
     <.link
@@ -35,7 +35,7 @@
   :if={@live_action in [:new, :edit]}
   id="entry-modal"
   show
-  on_cancel={JS.patch(~p"/entries")}
+  on_cancel={JS.patch(~p"/dictionary")}
 >
   <.live_component
     module={SignbankWeb.EntryLive.FormComponent}
@@ -43,6 +43,6 @@
     title={@page_title}
     action={@live_action}
     entry={@entry}
-    patch={~p"/entries"}
+    patch={~p"/dictionary"}
   />
 </.modal>

@@ -21,8 +21,8 @@ defmodule SignbankWeb.Router do
 
     # TODO: these routes are only slightly modified from `gen.live`, we don't want most of them
     live "/dictionary", EntryLive.Index, :index
-    live "/dictionary/new", EntryLive.Index, :new
-    live "/dictionary/:id/edit", EntryLive.Index, :edit
+    live "/dictionary/sign/new", EntryLive.Index, :new
+    live "/dictionary/sign/:id/edit", EntryLive.Index, :edit
 
     live "/dictionary/sign/:id", EntryLive.Show, :show
     live "/dictionary/sign/:id/show/edit", EntryLive.Show, :edit

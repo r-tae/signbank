@@ -3,13 +3,17 @@
   Entry <%= @entry.id %>
   <:subtitle>This is a entry record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/entries/#{@entry}/show/edit"} phx-click={JS.push_focus()}>
+    <.link patch={~p"/dictionary/sign/#{@entry.id_gloss}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit entry</.button>
     </.link>
   </:actions>
 </.header>
 
 <%!-- TODO: add video --%>
+<%!-- TODO: add variants (somehow) --%>
+<%!-- TODO: make video bigger --%>
+<%!-- TODO: add translations (under video or something) --%>
+<%!-- TODO:  --%>
 <%!-- TODO: make svelte component that covers the whole entry page --%>
 <%!-- TODO: also make a separate entry editor page --%>
 
@@ -17,22 +21,27 @@
   <%= for field <- [
     :id_gloss,
     :annotation_id_gloss,
-    :translations
+    :translations,
+    :published
 ] do %>
     <tr>
       <th>
         <%= Gettext.gettext(SignbankWeb.Gettext, Atom.to_string(field)) %>
       </th>
       <td>
-        <%= if Map.get(@entry, field) |> is_list() do %>
-          <%= Map.get(@entry, field) |> Enum.join(", ") %>
-        <% else %>
-          <%= Map.get(@entry, field) %>
+        <%= with value <- Map.get(@entry, field) do %>
+          <%= if is_list(value) do %>
+            <%= Enum.join(value, ", ") %>
+          <% else %>
+            <%= value %>
+          <% end %>
         <% end %>
       </td>
     </tr>
   <% end %>
 </table>
+
+<.definitions definitions={@entry.definitions} />
 
 <%!-- TODO: display videos/etc --%>
 <%= for variant <- @entry.variants do %>
@@ -42,14 +51,14 @@
 <% end %>
 
 <%!-- TODO: just navigate back? --%>
-<.back navigate={~p"/entries"}>Back to entries</.back>
+<.back navigate={~p"/dictionary"}>Back to entries</.back>
 
 <%!-- TODO: editing doesn't work and I don't want it to be a modal anyway --%>
 <.modal
   :if={@live_action == :edit}
   id="entry-modal"
   show
-  on_cancel={JS.patch(~p"/entries/#{@entry}")}
+  on_cancel={JS.patch(~p"/dictionary/sign/#{@entry.id_gloss}")}
 >
   <.live_component
     module={SignbankWeb.EntryLive.FormComponent}
@@ -57,6 +66,6 @@
     title={@page_title}
     action={@live_action}
     entry={@entry}
-    patch={~p"/entries/#{@entry}"}
+    patch={~p"/dictionary/sign/#{@entry}"}
   />
 </.modal>
