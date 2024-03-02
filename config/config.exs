@@ -39,6 +39,14 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :dart_sass,
+  version: "1.61.0",
+  default: [
+    args: ~w(css/:../priv/static/assets/),
+    cd: Path.expand("../assets", __DIR__)
+  ]
+
+# <input.scss>:<output.css> <input/>:<output/> <dir/>
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

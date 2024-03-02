@@ -1,0 +1,14 @@
+.logo {
+  /* left-[40rem] fixed inset-y-0 right-0 z-0 hidden lg:block xl:left-[50rem] */
+  left: 40rem;
+  position: fixed;
+  inset: 0;
+  right: 0;
+  z-index: 0;
+  visibility: hidden;
+  display: block;
+}
+
+html {
+  background-color: olivedrab !important;
+}

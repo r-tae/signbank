@@ -60,7 +60,8 @@ defmodule Signbank.MixProject do
       # Detect unsafe migrations
       {:excellent_migrations, "~> 0.1", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
-      {:systemd, "~> 0.6"}
+      {:systemd, "~> 0.6"},
+      {:dart_sass, "~> 0.6", runtime: Mix.env() == :dev}
     ]
   end
 
@@ -77,7 +78,12 @@ defmodule Signbank.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["cmd --cd assets npm install"],
-      "assets.deploy": ["assets.setup", "cmd --cd assets node build.js --deploy", "phx.digest"]
+      "assets.deploy": [
+        "assets.setup",
+        "cmd --cd assets node build.js --deploy",
+        "sass default --no-source-map --style=compressed",
+        "phx.digest"
+      ]
     ]
   end
 end
