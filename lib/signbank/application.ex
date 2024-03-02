@@ -19,8 +19,11 @@ defmodule Signbank.Application do
       # Start a worker by calling: Signbank.Worker.start_link(arg)
       # {Signbank.Worker, arg},
       # Start to serve requests, typically the last entry
-      SignbankWeb.Endpoint
+      SignbankWeb.Endpoint,
+      :systemd.ready()
     ]
+
+    choose_logger()
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
@@ -34,5 +37,16 @@ defmodule Signbank.Application do
   def config_change(changed, _new, removed) do
     SignbankWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  def choose_logger do
+    case Application.get_env(:signbank, :logger, :console) do
+      :systemd ->
+        :logger.add_handlers(:systemd)
+        Logger.remove_backend(:console)
+
+      :console ->
+        nil
+    end
   end
 end
