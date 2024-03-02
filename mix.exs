@@ -9,7 +9,12 @@ defmodule Signbank.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: [
+        signbank: [
+          steps: [:assemble, :tar]
+        ]
+      ]
     ]
   end
 
@@ -54,7 +59,8 @@ defmodule Signbank.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       # Detect unsafe migrations
       {:excellent_migrations, "~> 0.1", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:systemd, "~> 0.6"}
     ]
   end
 

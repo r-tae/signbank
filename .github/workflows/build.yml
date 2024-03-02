@@ -105,7 +105,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: signbank-${{ env.VERSION }}
-          path: _build/prod/rel/signbank-${{ env.VERSION }}.tar.gz
+          path: _build/prod/signbank-${{ env.VERSION }}.tar.gz
 
   deploy:
     name: Deploy release
