@@ -4,55 +4,55 @@ defmodule Signbank.DictionaryTest do
 
   alias Signbank.Dictionary
 
-  describe "entries" do
-    alias Signbank.Dictionary.Entry
+  describe "signs" do
+    alias Signbank.Dictionary.Sign
 
     import Signbank.DictionaryFixtures
 
     @invalid_attrs %{}
 
-    test "list_entries/0 returns all entries" do
-      entry = entry_fixture()
-      assert Dictionary.list_entries() == [entry]
+    test "list_signs/0 returns all signs" do
+      sign = sign_fixture()
+      assert Dictionary.list_signs() == [sign]
     end
 
-    test "get_entry!/1 returns the entry with given id" do
-      entry = entry_fixture()
-      assert Dictionary.get_entry!(entry.id) == entry
+    test "get_sign!/1 returns the sign with given id" do
+      sign = sign_fixture()
+      assert Dictionary.get_sign!(sign.id) == sign
     end
 
-    test "create_entry/1 with valid data creates a entry" do
+    test "create_sign/1 with valid data creates a sign" do
       valid_attrs = %{}
 
-      assert {:ok, %Entry{} = entry} = Dictionary.create_entry(valid_attrs)
+      assert {:ok, %Sign{} = sign} = Dictionary.create_sign(valid_attrs)
     end
 
-    test "create_entry/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Dictionary.create_entry(@invalid_attrs)
+    test "create_sign/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Dictionary.create_sign(@invalid_attrs)
     end
 
-    test "update_entry/2 with valid data updates the entry" do
-      entry = entry_fixture()
+    test "update_sign/2 with valid data updates the sign" do
+      sign = sign_fixture()
       update_attrs = %{}
 
-      assert {:ok, %Entry{} = entry} = Dictionary.update_entry(entry, update_attrs)
+      assert {:ok, %Sign{} = sign} = Dictionary.update_sign(sign, update_attrs)
     end
 
-    test "update_entry/2 with invalid data returns error changeset" do
-      entry = entry_fixture()
-      assert {:error, %Ecto.Changeset{}} = Dictionary.update_entry(entry, @invalid_attrs)
-      assert entry == Dictionary.get_entry!(entry.id)
+    test "update_sign/2 with invalid data returns error changeset" do
+      sign = sign_fixture()
+      assert {:error, %Ecto.Changeset{}} = Dictionary.update_sign(sign, @invalid_attrs)
+      assert sign == Dictionary.get_sign!(sign.id)
     end
 
-    test "delete_entry/1 deletes the entry" do
-      entry = entry_fixture()
-      assert {:ok, %Entry{}} = Dictionary.delete_entry(entry)
-      assert_raise Ecto.NoResultsError, fn -> Dictionary.get_entry!(entry.id) end
+    test "delete_sign/1 deletes the sign" do
+      sign = sign_fixture()
+      assert {:ok, %Sign{}} = Dictionary.delete_sign(sign)
+      assert_raise Ecto.NoResultsError, fn -> Dictionary.get_sign!(sign.id) end
     end
 
-    test "change_entry/1 returns a entry changeset" do
-      entry = entry_fixture()
-      assert %Ecto.Changeset{} = Dictionary.change_entry(entry)
+    test "change_sign/1 returns a sign changeset" do
+      sign = sign_fixture()
+      assert %Ecto.Changeset{} = Dictionary.change_sign(sign)
     end
   end
 end

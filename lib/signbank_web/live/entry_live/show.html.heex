@@ -1,10 +1,10 @@
 <%!-- TODO: this was from `gen.live`, look over it again --%>
 <.header>
-  Entry <%= @entry.id %>
-  <:subtitle>This is a entry record from your database.</:subtitle>
+  Sign <%= @sign.id %>
+  <:subtitle>This is a sign record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/dictionary/sign/#{@entry.id_gloss}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit entry</.button>
+    <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit sign</.button>
     </.link>
   </:actions>
 </.header>
@@ -14,8 +14,8 @@
 <%!-- TODO: make video bigger --%>
 <%!-- TODO: add translations (under video or something) --%>
 <%!-- TODO:  --%>
-<%!-- TODO: make svelte component that covers the whole entry page --%>
-<%!-- TODO: also make a separate entry editor page --%>
+<%!-- TODO: make svelte component that covers the whole sign page --%>
+<%!-- TODO: also make a separate sign editor page --%>
 
 <table>
   <%= for field <- [
@@ -29,7 +29,7 @@
         <%= Gettext.gettext(SignbankWeb.Gettext, Atom.to_string(field)) %>
       </th>
       <td>
-        <%= with value <- Map.get(@entry, field) do %>
+        <%= with value <- Map.get(@sign, field) do %>
           <%= if is_list(value) do %>
             <%= Enum.join(value, ", ") %>
           <% else %>
@@ -41,31 +41,31 @@
   <% end %>
 </table>
 
-<.definitions definitions={@entry.definitions} />
+<.definitions definitions={@sign.definitions} />
 
 <%!-- TODO: display videos/etc --%>
-<%= for variant <- @entry.variants do %>
+<%= for variant <- @sign.variants do %>
   <div title="variant">
     <%= variant.id_gloss %>
   </div>
 <% end %>
 
 <%!-- TODO: just navigate back? --%>
-<.back navigate={~p"/dictionary"}>Back to entries</.back>
+<.back navigate={~p"/dictionary"}>Back to signs</.back>
 
 <%!-- TODO: editing doesn't work and I don't want it to be a modal anyway --%>
 <.modal
   :if={@live_action == :edit}
-  id="entry-modal"
+  id="sign-modal"
   show
-  on_cancel={JS.patch(~p"/dictionary/sign/#{@entry.id_gloss}")}
+  on_cancel={JS.patch(~p"/dictionary/sign/#{@sign.id_gloss}")}
 >
   <.live_component
-    module={SignbankWeb.EntryLive.FormComponent}
-    id={@entry.id}
+    module={SignbankWeb.SignLive.FormComponent}
+    id={@sign.id}
     title={@page_title}
     action={@live_action}
-    entry={@entry}
-    patch={~p"/dictionary/sign/#{@entry}"}
+    sign={@sign}
+    patch={~p"/dictionary/sign/#{@sign}"}
   />
 </.modal>

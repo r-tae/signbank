@@ -1,5 +1,5 @@
 # TODO: this was from `gen.live`, look over it again
-defmodule SignbankWeb.EntryLive.Index do
+defmodule SignbankWeb.SignLive.Index do
   use SignbankWeb, :live_view
 
   alias Signbank.Dictionary
@@ -7,7 +7,7 @@ defmodule SignbankWeb.EntryLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :entries, Dictionary.list_entries())}
+    {:ok, stream(socket, :signs, Dictionary.list_signs())}
   end
 
   @impl true
@@ -17,32 +17,32 @@ defmodule SignbankWeb.EntryLive.Index do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit Entry")
-    |> assign(:entry, Dictionary.get_entry_by_id_gloss!(id))
+    |> assign(:page_title, "Edit Sign")
+    |> assign(:sign, Dictionary.get_sign_by_id_gloss!(id))
   end
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New Entry")
-    |> assign(:entry, %Sign{})
+    |> assign(:page_title, "New Sign")
+    |> assign(:sign, %Sign{})
   end
 
   defp apply_action(socket, :index, _params) do
     socket
     |> assign(:page_title, "Listing Entries")
-    |> assign(:entry, nil)
+    |> assign(:sign, nil)
   end
 
   @impl true
-  def handle_info({SignbankWeb.EntryLive.FormComponent, {:saved, entry}}, socket) do
-    {:noreply, stream_insert(socket, :entries, entry)}
+  def handle_info({SignbankWeb.SignLive.FormComponent, {:saved, sign}}, socket) do
+    {:noreply, stream_insert(socket, :signs, sign)}
   end
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    entry = Dictionary.get_entry!(id)
-    {:ok, _} = Dictionary.delete_entry(entry)
+    sign = Dictionary.get_sign!(id)
+    {:ok, _} = Dictionary.delete_sign(sign)
 
-    {:noreply, stream_delete(socket, :entries, entry)}
+    {:noreply, stream_delete(socket, :signs, sign)}
   end
 end

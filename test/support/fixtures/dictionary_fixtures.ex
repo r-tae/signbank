@@ -6,14 +6,14 @@ defmodule Signbank.DictionaryFixtures do
   """
 
   @doc """
-  Generate a entry.
+  Generate a sign.
   """
-  def entry_fixture(attrs \\ %{}) do
-    {:ok, entry} =
+  def sign_fixture(attrs \\ %{}) do
+    {:ok, sign} =
       attrs
       |> Enum.into(%{})
-      |> Signbank.Dictionary.create_entry()
+      |> Signbank.Dictionary.create_sign()
 
-    entry
+    sign
   end
 end

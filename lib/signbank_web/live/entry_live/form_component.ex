@@ -1,5 +1,5 @@
 # TODO: this was from `gen.live`, look over it again
-defmodule SignbankWeb.EntryLive.FormComponent do
+defmodule SignbankWeb.SignLive.FormComponent do
   use SignbankWeb, :live_component
 
   alias Signbank.Dictionary
@@ -10,18 +10,22 @@ defmodule SignbankWeb.EntryLive.FormComponent do
     <div>
       <.header>
         <%= @title %>
-        <:subtitle>Use this form to manage entry records in your database.</:subtitle>
+        <:subtitle>Use this form to manage sign records in your database.</:subtitle>
       </.header>
 
       <.simple_form
         for={@form}
-        id="entry-form"
+        id="sign-form"
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
       >
+        <.input field={@form[:id_gloss]} label="ID gloss" />
+        <.input field={@form[:annotation_id_gloss]} label="Annotation ID Gloss" />
+        <.input field={@form[:translations]} label="translations" />
+
         <:actions>
-          <.button phx-disable-with="Saving...">Save Entry</.button>
+          <.button phx-disable-with="Saving...">Save Sign</.button>
         </:actions>
       </.simple_form>
     </div>
@@ -29,8 +33,8 @@ defmodule SignbankWeb.EntryLive.FormComponent do
   end
 
   @impl true
-  def update(%{entry: entry} = assigns, socket) do
-    changeset = Dictionary.change_entry(entry)
+  def update(%{sign: sign} = assigns, socket) do
+    changeset = Dictionary.change_sign(sign)
 
     {:ok,
      socket
@@ -39,27 +43,27 @@ defmodule SignbankWeb.EntryLive.FormComponent do
   end
 
   @impl true
-  def handle_event("validate", %{"entry" => entry_params}, socket) do
+  def handle_event("validate", %{"sign" => sign_params}, socket) do
     changeset =
-      socket.assigns.entry
-      |> Dictionary.change_entry(entry_params)
+      socket.assigns.sign
+      |> Dictionary.change_sign(sign_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
   end
 
-  def handle_event("save", %{"entry" => entry_params}, socket) do
-    save_entry(socket, socket.assigns.action, entry_params)
+  def handle_event("save", %{"sign" => sign_params}, socket) do
+    save_sign(socket, socket.assigns.action, sign_params)
   end
 
-  defp save_entry(socket, :edit, entry_params) do
-    case Dictionary.update_entry(socket.assigns.entry, entry_params) do
-      {:ok, entry} ->
-        notify_parent({:saved, entry})
+  defp save_sign(socket, :edit, sign_params) do
+    case Dictionary.update_sign(socket.assigns.sign, sign_params) do
+      {:ok, sign} ->
+        notify_parent({:saved, sign})
 
         {:noreply,
          socket
-         |> put_flash(:info, "Entry updated successfully")
+         |> put_flash(:info, "Sign updated successfully")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -67,14 +71,14 @@ defmodule SignbankWeb.EntryLive.FormComponent do
     end
   end
 
-  defp save_entry(socket, :new, entry_params) do
-    case Dictionary.create_entry(entry_params) do
-      {:ok, entry} ->
-        notify_parent({:saved, entry})
+  defp save_sign(socket, :new, sign_params) do
+    case Dictionary.create_sign(sign_params) do
+      {:ok, sign} ->
+        notify_parent({:saved, sign})
 
         {:noreply,
          socket
-         |> put_flash(:info, "Entry created successfully")
+         |> put_flash(:info, "Sign created successfully")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->

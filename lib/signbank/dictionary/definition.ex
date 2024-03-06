@@ -1,6 +1,6 @@
 defmodule Signbank.Dictionary.Definition do
   @moduledoc """
-  A single definition for an entry. Usually text, can be a video
+  A single definition for a sign. Usually text, can be a video
   """
   use Ecto.Schema
   import Ecto.Changeset

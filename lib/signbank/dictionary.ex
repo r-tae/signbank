@@ -10,35 +10,35 @@ defmodule Signbank.Dictionary do
   alias Signbank.Dictionary.Sign
 
   @doc """
-  Returns the list of entries.
+  Returns the list of signs.
 
   ## Examples
 
-      iex> list_entries()
-      [%Entry{}, ...]
+      iex> list_signs()
+      [%Sign{}, ...]
 
   """
-  def list_entries do
+  def list_signs do
     Repo.all(Sign)
   end
 
   @doc """
-  Gets a single entry.
+  Gets a single sign.
 
-  Raises `Ecto.NoResultsError` if the Entry does not exist.
+  Raises `Ecto.NoResultsError` if the Sign does not exist.
 
   ## Examples
 
-      iex> get_entry!(123)
-      %Entry{}
+      iex> get_sign!(123)
+      %Sign{}
 
-      iex> get_entry!(456)
+      iex> get_sign!(456)
       ** (Ecto.NoResultsError)
 
   """
-  def get_entry!(id), do: Repo.get!(Sign, id)
+  def get_sign!(id), do: Repo.get!(Sign, id)
 
-  def get_entry_by_id_gloss!(id_gloss),
+  def get_sign_by_id_gloss!(id_gloss),
     do:
       Repo.get_by!(
         from(s in Sign, preload: [definitions: [], variants: []]),
@@ -46,67 +46,67 @@ defmodule Signbank.Dictionary do
       )
 
   @doc """
-  Creates a entry.
+  Creates a sign.
 
   ## Examples
 
-      iex> create_entry(%{field: value})
-      {:ok, %Entry{}}
+      iex> create_sign(%{field: value})
+      {:ok, %Sign{}}
 
-      iex> create_entry(%{field: bad_value})
+      iex> create_sign(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_entry(attrs \\ %{}) do
+  def create_sign(attrs \\ %{}) do
     %Sign{}
     |> Sign.changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Updates a entry.
+  Updates a sign.
 
   ## Examples
 
-      iex> update_entry(entry, %{field: new_value})
-      {:ok, %Entry{}}
+      iex> update_sign(sign, %{field: new_value})
+      {:ok, %Sign{}}
 
-      iex> update_entry(entry, %{field: bad_value})
+      iex> update_sign(sign, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_entry(%Sign{} = entry, attrs) do
-    entry
+  def update_sign(%Sign{} = sign, attrs) do
+    sign
     |> Sign.changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Deletes a entry.
+  Deletes a sign.
 
   ## Examples
 
-      iex> delete_entry(entry)
-      {:ok, %Entry{}}
+      iex> delete_sign(sign)
+      {:ok, %Sign{}}
 
-      iex> delete_entry(entry)
+      iex> delete_sign(sign)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_entry(%Sign{} = entry) do
-    Repo.delete(entry)
+  def delete_sign(%Sign{} = sign) do
+    Repo.delete(sign)
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking entry changes.
+  Returns an `%Ecto.Changeset{}` for tracking sign changes.
 
   ## Examples
 
-      iex> change_entry(entry)
-      %Ecto.Changeset{data: %Entry{}}
+      iex> change_sign(sign)
+      %Ecto.Changeset{data: %Sign{}}
 
   """
-  def change_entry(%Sign{} = entry, attrs \\ %{}) do
-    Sign.changeset(entry, attrs)
+  def change_sign(%Sign{} = sign, attrs \\ %{}) do
+    Sign.changeset(sign, attrs)
   end
 end

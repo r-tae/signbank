@@ -1,6 +1,6 @@
 defmodule Signbank.Dictionary.Morphology do
   @moduledoc """
-  The morphology of an entry, actually stored as JSON in the database
+  The morphology of a sign, actually stored as JSON in the database
   """
   use Ecto.Schema
   import Ecto.Changeset
@@ -13,6 +13,10 @@ defmodule Signbank.Dictionary.Morphology do
     field :locating_and_directional, :boolean
     field :body_locating, :string
     field :hamnosys, :string
+
+    field :initialism, :string
+    field :alphabet, :string
+    field :abbreviation, :string
 
     # TODO: eventually we would like to refactor this information into a table, to properly link signs
     field :blend_of, :string
@@ -31,9 +35,13 @@ defmodule Signbank.Dictionary.Morphology do
       :orientating,
       :locating_and_directional,
       :body_locating,
+      :hamnosys,
       :blend_of,
       :calque_of,
       :compound_of,
+      :initialism,
+      :alphabet,
+      :abbreviation,
       :idiom_of,
       :multi_sign_expression
     ])

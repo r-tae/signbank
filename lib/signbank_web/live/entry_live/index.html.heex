@@ -3,27 +3,27 @@
   Listing Entries
   <:actions>
     <.link patch={~p"/dictionary/sign/new"}>
-      <.button>New Entry</.button>
+      <.button>New Sign</.button>
     </.link>
   </:actions>
 </.header>
 
 <.table
-  id="entries"
-  rows={@streams.entries}
-  row_click={fn {_id, entry} -> JS.navigate(~p"/dictionary/sign/#{entry.id_gloss}") end}
+  id="signs"
+  rows={@streams.signs}
+  row_click={fn {_id, sign} -> JS.navigate(~p"/dictionary/sign/#{sign.id_gloss}") end}
 >
-  <:col :let={{_id, entry}} label="id_gloss"><%= entry.id_gloss %></:col>
-  <:col :let={{_id, entry}} label="annotation_id_gloss"><%= entry.annotation_id_gloss %></:col>
-  <:action :let={{_id, entry}}>
+  <:col :let={{_id, sign}} label="id_gloss"><%= sign.id_gloss %></:col>
+  <:col :let={{_id, sign}} label="annotation_id_gloss"><%= sign.annotation_id_gloss %></:col>
+  <:action :let={{_id, sign}}>
     <div class="sr-only">
-      <.link navigate={~p"/dictionary/sign/#{entry.id_gloss}"}>Show</.link>
+      <.link navigate={~p"/dictionary/sign/#{sign.id_gloss}"}>Show</.link>
     </div>
-    <.link patch={~p"/dictionary/sign/#{entry.id_gloss}/edit"}>Edit</.link>
+    <.link patch={~p"/dictionary/sign/#{sign.id_gloss}/edit"}>Edit</.link>
   </:action>
-  <:action :let={{id, entry}}>
+  <:action :let={{id, sign}}>
     <.link
-      phx-click={JS.push("delete", value: %{id: entry.id}) |> hide("##{id}")}
+      phx-click={JS.push("delete", value: %{id: sign.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
     >
       Delete
@@ -33,16 +33,16 @@
 
 <.modal
   :if={@live_action in [:new, :edit]}
-  id="entry-modal"
+  id="sign-modal"
   show
   on_cancel={JS.patch(~p"/dictionary")}
 >
   <.live_component
-    module={SignbankWeb.EntryLive.FormComponent}
-    id={@entry.id || :new}
+    module={SignbankWeb.SignLive.FormComponent}
+    id={@sign.id || :new}
     title={@page_title}
     action={@live_action}
-    entry={@entry}
+    sign={@sign}
     patch={~p"/dictionary"}
   />
 </.modal>

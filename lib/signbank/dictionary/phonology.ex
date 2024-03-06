@@ -1,6 +1,6 @@
 defmodule Signbank.Dictionary.Phonology do
   @moduledoc """
-  The phonology of an entry, actually stored as JSON in the database
+  The phonology of a sign, actually stored as JSON in the database
   """
   use Ecto.Schema
   import Ecto.Changeset

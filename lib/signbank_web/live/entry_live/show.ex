@@ -1,5 +1,5 @@
 # TODO: this was from `gen.live`, look over it again
-defmodule SignbankWeb.EntryLive.Show do
+defmodule SignbankWeb.SignLive.Show do
   use SignbankWeb, :live_view
 
   alias Signbank.Dictionary
@@ -29,11 +29,11 @@ defmodule SignbankWeb.EntryLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:entry, Dictionary.get_entry_by_id_gloss!(id_gloss))}
+     |> assign(:sign, Dictionary.get_sign_by_id_gloss!(id_gloss))}
   end
 
-  defp page_title(:show), do: "Show Entry"
-  defp page_title(:edit), do: "Edit Entry"
+  defp page_title(:show), do: "Show Sign"
+  defp page_title(:edit), do: "Edit Sign"
 
   defp group_definitions_by_role(definitions) do
     definitions
