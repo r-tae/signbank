@@ -11,7 +11,7 @@ defmodule Signbank.Dictionary.Morphology do
     field :end_directional, :boolean
     field :orientating, :boolean
     field :locating_and_directional, :boolean
-    field :body_locating, :string
+    field :body_locating, :boolean
     field :hamnosys, :string
 
     field :initialism, :string
