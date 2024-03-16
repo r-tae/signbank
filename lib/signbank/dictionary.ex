@@ -23,6 +23,19 @@ defmodule Signbank.Dictionary do
   end
 
   @doc """
+  Returns a paginated list of signs.
+
+  ## Examples
+
+      iex> list_signs(1)
+      [%Sign{}, ...]
+  """
+  def list_signs(page) do
+    from(s in Sign, order_by: [asc: s.id_gloss, asc: s.id])
+    |> Repo.paginate(%{page: page})
+  end
+
+  @doc """
   Gets a single sign.
 
   Raises `Ecto.NoResultsError` if the Sign does not exist.

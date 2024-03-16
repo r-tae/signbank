@@ -31,6 +31,14 @@
   </:action>
 </.table>
 
+<ol class="page_nav">
+  <%= for page_num <- (@page-10)..(@page+10) do %>
+    <li id={"page_nav__#{page_num}"} :if={page_num > 0}><a href={~p"/dictionary?page=#{page_num}"}><%= page_num %></a></li>
+  <% end %>
+  <%!-- <li id={"page_nav__#{@signs.total_pages}"} :if={@signs.total_pages > @page+10}><a href={~p"/dictionary?page=#{@signs.total_pages}"}><% @signs.total_pages %></a></li> --%>
+  
+</ol>
+
 <.modal
   :if={@live_action in [:new, :edit]}
   id="sign-modal"

@@ -14,9 +14,9 @@ defmodule Signbank.Dictionary.Morphology do
     field :body_locating, :boolean
     field :hamnosys, :string
 
-    field :initialism, :string
-    field :alphabet, :string
-    field :abbreviation, :string
+    field :initialism, :boolean
+    field :alphabet, :boolean
+    field :abbreviation, :boolean
 
     # TODO: eventually we would like to refactor this information into a table, to properly link signs
     field :blend_of, :string

@@ -7,12 +7,19 @@ defmodule SignbankWeb.SignLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :signs, Dictionary.list_signs())}
+    {:ok, stream(socket, :signs, [])}
   end
 
   @impl true
   def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    page = String.to_integer(Map.get(params, "page", "1"))
+
+    IO.inspect(Dictionary.list_signs(page))
+    {:noreply,
+     socket
+     |> assign(:page, page)
+     |> apply_action(socket.assigns.live_action, params)
+     |> stream(:signs, Dictionary.list_signs(page), reset: true)}
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do

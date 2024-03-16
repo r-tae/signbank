@@ -61,7 +61,8 @@ defmodule Signbank.MixProject do
       {:excellent_migrations, "~> 0.1", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:systemd, "~> 0.6"},
-      {:dart_sass, "~> 0.6", runtime: Mix.env() == :dev}
+      {:dart_sass, "~> 0.6", runtime: Mix.env() == :dev},
+      {:scrivener_ecto, "~> 2.7"}
     ]
   end
 
