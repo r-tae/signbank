@@ -1,12 +1,13 @@
 <%!-- TODO: this was from `gen.live`, look over it again --%>
-<.header>
+<%!-- TODO: fix this markup, its too generic --%>
+<div>
   Listing Entries
-  <:actions>
+  <div>
     <.link patch={~p"/dictionary/sign/new"}>
-      <.button>New Sign</.button>
+      <.button><%= gettext("New sign") %></.button>
     </.link>
-  </:actions>
-</.header>
+  </div>
+</div>
 
 <.table
   id="signs"
@@ -31,12 +32,15 @@
   </:action>
 </.table>
 
-<ol class="page_nav">
-  <%= for page_num <- (@page-10)..(@page+10) do %>
-    <li id={"page_nav__#{page_num}"} :if={page_num > 0}><a href={~p"/dictionary?page=#{page_num}"}><%= page_num %></a></li>
+<ol class="page-nav">
+  <%= for page_num <- (@page.page_number-10)..(@page.page_number+10) do %>
+    <li
+      :if={page_num > 0 and page_num <= @page.total_pages}
+      class={if page_num == @page.page_number, do: "page-nav__current"}
+    >
+      <a href={~p"/dictionary?page=#{page_num}"}><%= page_num %></a>
+    </li>
   <% end %>
-  <%!-- <li id={"page_nav__#{@signs.total_pages}"} :if={@signs.total_pages > @page+10}><a href={~p"/dictionary?page=#{@signs.total_pages}"}><% @signs.total_pages %></a></li> --%>
-  
 </ol>
 
 <.modal

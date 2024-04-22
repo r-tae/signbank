@@ -28,14 +28,14 @@ defmodule Signbank.Dictionary.Sign do
     embeds_one :phonology, Dictionary.Phonology
     embeds_one :morphology, Dictionary.Morphology
 
-    # This was WIP nothingness
     # TODO: revisit this, it's not a foreign key in the database, I don't know how bad that is
-    # belongs_to :active_video, Dictionary.SignVideo,
-    #   foreign_key: :active_video_id,
-    #   references: :id
+    belongs_to :active_video, Dictionary.SignVideo,
+      foreign_key: :active_video_id,
+      references: :id
 
     # TODO: uncomment this after adding %SignVideo{}
-    # has_many :videos, Dictionary.SignVideo
+    has_many :videos, Dictionary.SignVideo
+    has_many :regions, Dictionary.SignRegion
 
     field :has_video?, :string, virtual: true
     field :has_definitions?, :string, virtual: true
@@ -69,6 +69,19 @@ defmodule Signbank.Dictionary.Sign do
     field :signed_english_gloss, :string
     field :signed_english_only, :boolean
 
+    field :lexis_doubtful, :boolean
+    field :lexis_proper_name, :boolean
+    field :lexis_restricted, :boolean
+    field :lexis_marginal, :boolean
+    field :lexis_obsolete, :boolean
+    field :lexis_technical, :boolean
+
+    field :religion_catholic, :boolean
+    field :religion_catholic_school, :boolean
+    field :religion_jehovahs_witness, :boolean
+    field :religion_other_religion, :boolean
+    field :religion_anglican, :boolean
+
     timestamps()
   end
 
@@ -86,7 +99,19 @@ defmodule Signbank.Dictionary.Sign do
       :proposed_new_sign,
       :compound,
       :hamnosys,
-      :variant_of_id
+      :variant_of_id,
+      :active_video_id,
+      :lexis_doubtful,
+      :lexis_proper_name,
+      :lexis_restricted,
+      :lexis_marginal,
+      :lexis_obsolete,
+      :lexis_technical,
+      :religion_catholic,
+      :religion_catholic_school,
+      :religion_jehovahs_witness,
+      :religion_other_religion,
+      :religion_anglican
     ]
 
     sign
@@ -103,9 +128,10 @@ defmodule Signbank.Dictionary.Sign do
     # |> foreign_key_constraint(:variants, name: :signs_variant_of_fkey)
     |> unique_constraint(:id_gloss)
     |> assoc_constraint(:headsign)
+    # |> assoc_constraint(:active_video_id)
+    |> cast_assoc(:videos)
 
     # TODO: uncomment this
-    # |> assoc_constraint(:active_video)
   end
 
   defp validate_sign_type(changeset) do

@@ -86,6 +86,7 @@ defmodule SignbankWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import SignbankWeb.CoreComponents
+      import SignbankWeb.MapComponents
       import SignbankWeb.Gettext
       import LiveSvelte
 

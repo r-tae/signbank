@@ -22,9 +22,11 @@ defmodule SignbankWeb.Router do
     # TODO: these routes are only slightly modified from `gen.live`, we don't want most of them
     live "/dictionary", SignLive.Index, :index
     live "/dictionary/sign/new", SignLive.Index, :new
-    live "/dictionary/sign/:id/edit", SignLive.Index, :edit
+    # live "/dictionary/sign/:id/edit", SignLive.Index, :edit
+    live "/dictionary/sign/:id/edit", SignLive.Edit, :edit
 
-    live "/dictionary/sign/:id", SignLive.Show, :show
+    live "/dictionary/sign/:id", SignLive.BasicView, :show
+    live "/dictionary/sign/:id/linguistic", SignLive.LinguisticView, :show
     live "/dictionary/sign/:id/show/edit", SignLive.Show, :edit
 
     # These are routes from the "recreated_signbank" project

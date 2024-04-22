@@ -75,6 +75,7 @@ defmodule SignbankWeb.CoreComponents do
                   class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
                   aria-label={gettext("close")}
                 >
+                  <%!-- TODO: icons are broken --%> x
                   <.icon name="hero-x-mark-solid" class="h-5 w-5" />
                 </button>
               </div>
@@ -115,9 +116,9 @@ defmodule SignbankWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed top-2 right-2 mr-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1",
-        @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
-        @kind == :error && "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
+        "flash",
+        @kind == :info && "flash__info",
+        @kind == :error && "flash__error"
       ]}
       {@rest}
     >
@@ -592,6 +593,7 @@ defmodule SignbankWeb.CoreComponents do
   attr :name, :string, required: true
   attr :class, :string, default: nil
 
+  # TODO: fix icons
   def icon(%{name: "hero-" <> _} = assigns) do
     ~H"""
     <span class={[@name, @class]} />
@@ -603,10 +605,7 @@ defmodule SignbankWeb.CoreComponents do
   def show(js \\ %JS{}, selector) do
     JS.show(js,
       to: selector,
-      transition:
-        {"transition-all transform ease-out duration-300",
-         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
-         "opacity-100 translate-y-0 sm:scale-100"}
+      transition: {"transition__show--start", "transition__show--mid", "transition__show--end"}
     )
   end
 
@@ -614,10 +613,7 @@ defmodule SignbankWeb.CoreComponents do
     JS.hide(js,
       to: selector,
       time: 200,
-      transition:
-        {"transition-all transform ease-in duration-200",
-         "opacity-100 translate-y-0 sm:scale-100",
-         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"}
+      transition: {"transition__hide--start", "transition__hide--mid", "transition__hide--end"}
     )
   end
 
@@ -671,5 +667,73 @@ defmodule SignbankWeb.CoreComponents do
   """
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
+  end
+
+  @role_order [
+    :general,
+    :auslan,
+    :noun,
+    :verb,
+    :modifier,
+    :augment,
+    :deictic,
+    :question,
+    :interact,
+    :popular_explanation,
+    :note,
+    :privatenote
+  ]
+
+  defp group_definitions_by_role(definitions) do
+    definitions
+    |> Enum.group_by(fn def -> def.role end)
+    |> Enum.to_list()
+    |> Enum.sort_by(fn {role, _defs} ->
+      Enum.find_index(
+        @role_order,
+        fn x -> x == role end
+      )
+    end)
+  end
+
+  defp definition_role_to_string(:general), do: SignbankWeb.Gettext.gettext("General Definition")
+  defp definition_role_to_string(:auslan), do: SignbankWeb.Gettext.gettext("Auslan Definition")
+  defp definition_role_to_string(:noun), do: SignbankWeb.Gettext.gettext("As a Noun")
+  defp definition_role_to_string(:verb), do: SignbankWeb.Gettext.gettext("As a Verb or Adjective")
+  defp definition_role_to_string(:modifier), do: SignbankWeb.Gettext.gettext("As Modifier")
+  # ???
+  defp definition_role_to_string(:augment), do: SignbankWeb.Gettext.gettext("Augment")
+  defp definition_role_to_string(:deictic), do: SignbankWeb.Gettext.gettext("As a Pointing Sign")
+  defp definition_role_to_string(:question), do: SignbankWeb.Gettext.gettext("As a question")
+  defp definition_role_to_string(:interact), do: SignbankWeb.Gettext.gettext("Interactive")
+
+  defp definition_role_to_string(:popular_explanation),
+    do: SignbankWeb.Gettext.gettext("Popular explanation")
+
+  defp definition_role_to_string(:note), do: SignbankWeb.Gettext.gettext("Note")
+  defp definition_role_to_string(:privatenote), do: SignbankWeb.Gettext.gettext("Private note")
+
+  def definitions(assigns) do
+    assigns =
+      assign(
+        assigns,
+        :def_groups,
+        group_definitions_by_role(assigns.definitions)
+      )
+
+    ~H"""
+    <div class="definitions">
+      <%= for {role, definitions} <- @def_groups do %>
+        <div class="definition">
+          <div class="definition__role"><%= definition_role_to_string(role) %></div>
+          <ol class="definition__senses">
+            <%= for definition <- definitions do %>
+              <li><%= definition.text %></li>
+            <% end %>
+          </ol>
+        </div>
+      <% end %>
+    </div>
+    """
   end
 end

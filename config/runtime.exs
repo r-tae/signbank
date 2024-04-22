@@ -20,6 +20,14 @@ if System.get_env("PHX_SERVER") do
   config :signbank, SignbankWeb.Endpoint, server: true
 end
 
+config :signbank, SimpleS3Upload,
+  access_key_id: System.get_env("S3_ACCESS_KEY_ID"),
+  secret_access_key: System.get_env("S3_SECRET_ACCESS_KEY"),
+  bucket: System.get_env("S3_BUCKET"),
+  region: System.get_env("S3_REGION")
+
+config :signbank, :media_url, System.get_env("MEDIA_BASE_URL")
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

@@ -1,6 +1,7 @@
 # TODO: this was from `gen.live`, look over it again
 defmodule SignbankWeb.SignLive.Index do
   use SignbankWeb, :live_view
+  import SignbankWeb.Gettext
 
   alias Signbank.Dictionary
   alias Signbank.Dictionary.Sign
@@ -12,31 +13,30 @@ defmodule SignbankWeb.SignLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
-    page = String.to_integer(Map.get(params, "page", "1"))
+    page = Dictionary.list_signs(String.to_integer(Map.get(params, "page", "1")))
 
-    IO.inspect(Dictionary.list_signs(page))
     {:noreply,
      socket
      |> assign(:page, page)
      |> apply_action(socket.assigns.live_action, params)
-     |> stream(:signs, Dictionary.list_signs(page), reset: true)}
+     |> stream(:signs, page, reset: true)}
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit Sign")
+    |> assign(:page_title, gettext("Edit sign"))
     |> assign(:sign, Dictionary.get_sign_by_id_gloss!(id))
   end
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New Sign")
+    |> assign(:page_title, gettext("New sign"))
     |> assign(:sign, %Sign{})
   end
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Entries")
+    |> assign(:page_title, gettext("List of entries"))
     |> assign(:sign, nil)
   end
 

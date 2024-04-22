@@ -31,8 +31,10 @@ defmodule Signbank.Dictionary do
       [%Sign{}, ...]
   """
   def list_signs(page) do
-    from(s in Sign, order_by: [asc: s.id_gloss, asc: s.id])
-    |> Repo.paginate(%{page: page})
+    Repo.paginate(
+      from(s in Sign, order_by: [asc: s.id_gloss, asc: s.id]),
+      %{page: page}
+    )
   end
 
   @doc """
@@ -54,7 +56,15 @@ defmodule Signbank.Dictionary do
   def get_sign_by_id_gloss!(id_gloss),
     do:
       Repo.get_by!(
-        from(s in Sign, preload: [definitions: [], variants: []]),
+        from(s in Sign,
+          preload: [
+            definitions: [],
+            variants: [],
+            regions: [],
+            videos: [],
+            active_video: []
+          ]
+        ),
         id_gloss: id_gloss
       )
 

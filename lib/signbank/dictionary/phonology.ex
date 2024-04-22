@@ -29,6 +29,7 @@ defmodule Signbank.Dictionary.Phonology do
     field :movement_cross, :boolean
     field :movement_direction, :string
     field :movement_path, :string
+    field :movement_repeated, :boolean
     field :movement_forearm_rotation, :boolean
     field :movement_wrist_nod, :boolean
     field :movement_fingers_straighten, :boolean
@@ -42,8 +43,15 @@ defmodule Signbank.Dictionary.Phonology do
     field :contact_start, :boolean
     field :contact_end, :boolean
     field :contact_during, :boolean
-    field :contact_repeat, :boolean
     field :contact_location, :boolean
+    field :contact_body, :boolean
+    field :contact_hands, :boolean
+
+    # TODO: change to enum
+    field :handedness, :string
+    # TODO: change to enum
+    field :repetition_type, :string
+    field :loc_rightside_or_leftside, :string
   end
 
   def changeset(phonology, attrs) do
@@ -72,6 +80,7 @@ defmodule Signbank.Dictionary.Phonology do
       :movement_cross,
       :movement_direction,
       :movement_path,
+      :movement_repeated,
       :movement_forearm_rotation,
       :movement_wrist_nod,
       :movement_fingers_straighten,
@@ -85,8 +94,10 @@ defmodule Signbank.Dictionary.Phonology do
       :contact_start,
       :contact_end,
       :contact_during,
-      :contact_repeat,
-      :contact_location
+      :contact_location,
+      :handedness,
+      :repetition_type,
+      :loc_rightside_or_leftside
     ])
   end
 end

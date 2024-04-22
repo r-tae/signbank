@@ -1,0 +1,278 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:484
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/form_component.ex:25
+#, elixir-autogen, elixir-format
+msgid "Annotation ID gloss"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:161
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:152
+#, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:173
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/form_component.ex:24
+#, elixir-autogen, elixir-format
+msgid "ID gloss"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:168
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:151
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:156
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:76
+#: lib/signbank_web/components/core_components.ex:131
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:286
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/form_component.ex:28
+#, elixir-autogen, elixir-format
+msgid "Translations"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/basic_view.ex:22
+#: lib/signbank_web/live/entry_live/index.ex:27
+#: lib/signbank_web/live/entry_live/linguistic_view.ex:22
+#, elixir-autogen, elixir-format
+msgid "Edit sign"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/index.ex:39
+#, elixir-autogen, elixir-format
+msgid "List of entries"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/index.ex:33
+#: lib/signbank_web/live/entry_live/index.html.heex:7
+#, elixir-autogen, elixir-format
+msgid "New sign"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/form_component.ex:46
+#, elixir-autogen, elixir-format
+msgid "Save sign"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/basic_view.ex:21
+#: lib/signbank_web/live/entry_live/linguistic_view.ex:21
+#, elixir-autogen, elixir-format
+msgid "Show sign"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/form_component.ex:46
+#, elixir-autogen, elixir-format
+msgid "Saving..."
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/form_component.ex:35
+#, elixir-autogen, elixir-format
+msgid "Variant of"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:319
+#, elixir-autogen, elixir-format
+msgid "alternating"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:320
+#, elixir-autogen, elixir-format
+msgid "away"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:278
+#, elixir-autogen, elixir-format
+msgid "body"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:322
+#, elixir-autogen, elixir-format
+msgid "cross"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:316
+#, elixir-autogen, elixir-format
+msgid "dominant hand only"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:275
+#, elixir-autogen, elixir-format
+msgid "during"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:274
+#, elixir-autogen, elixir-format
+msgid "end"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:304
+#, elixir-autogen, elixir-format
+msgid "fingers bend"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:303
+#, elixir-autogen, elixir-format
+msgid "fingers crumble"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:301
+#, elixir-autogen, elixir-format
+msgid "fingers straightens"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:302
+#, elixir-autogen, elixir-format
+msgid "fingers wiggle"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:299
+#, elixir-autogen, elixir-format
+msgid "forearm rotates"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:277
+#, elixir-autogen, elixir-format
+msgid "hands"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:284
+#, elixir-autogen, elixir-format
+msgid "handshape"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:276
+#, elixir-autogen, elixir-format
+msgid "location"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:285
+#, elixir-autogen, elixir-format
+msgid "open"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:287
+#, elixir-autogen, elixir-format
+msgid "orientation"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:318
+#, elixir-autogen, elixir-format
+msgid "parallel"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:273
+#, elixir-autogen, elixir-format
+msgid "start"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:317
+#, elixir-autogen, elixir-format
+msgid "symmetrical"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:321
+#, elixir-autogen, elixir-format
+msgid "towards"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:300
+#, elixir-autogen, elixir-format
+msgid "wrist nods"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:709
+#, elixir-autogen, elixir-format
+msgid "As Modifier"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:707
+#, elixir-autogen, elixir-format
+msgid "As a Noun"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:711
+#, elixir-autogen, elixir-format
+msgid "As a Pointing Sign"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:708
+#, elixir-autogen, elixir-format
+msgid "As a Verb or Adjective"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:712
+#, elixir-autogen, elixir-format
+msgid "As a question"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:710
+#, elixir-autogen, elixir-format
+msgid "Augment"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:706
+#, elixir-autogen, elixir-format
+msgid "Auslan Definition"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:705
+#, elixir-autogen, elixir-format
+msgid "General Definition"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:713
+#, elixir-autogen, elixir-format
+msgid "Interactive"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:715
+#, elixir-autogen, elixir-format
+msgid "Note"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:714
+#, elixir-autogen, elixir-format
+msgid "Popular explanation"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:716
+#, elixir-autogen, elixir-format
+msgid "Private note"
+msgstr ""

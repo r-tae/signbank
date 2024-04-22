@@ -1,0 +1,59 @@
+<%!-- TODO: fill out all of the accoutrement we need (like jumping back to search, delete button, search corpus quicklink etc maybe) --%>
+<%!-- TODO: also change wording of things like "edit entry" --%>
+<div>
+  Edit entry
+  <%!-- <:actions>
+    <.link patch={~p"/dictionary/sign/new"}>
+      <.button><%= gettext("Edit sign") %></.button>
+    </.link>
+  </:actions> --%>
+</div>
+<%!-- 
+Sign Number:	36460
+ID Gloss:	house1a
+Annotation ID Gloss:	HOUSE
+Keywords	house, home, dwelling, residence
+Sense Number	No Value Set
+Morphology	No Value Set
+Stem Sign Number	No Value Set
+Compound of	No Value Set
+Language	Auslan, BSL
+Regional template	No Value Set
+##### regions ######
+
+In Web Dictionary	Yes
+Proposed New Sign	No
+
+
+#### phonology #####
+
+
+Relations
+
+
+definitions
+
+
+tags
+translations (with the requisite logic around splitting on ", " and adding it back)
+
+ --%>
+<%= @sign.id_gloss %>
+<%!-- 
+<form phx-submit="save" phx-change="validate">
+  <label for="annotation-id-gloss">Annotation ID gloss</label>
+  <input type="text" name="annotation-id-gloss" id="annotation-id-gloss" phx-update="ignore" />
+
+<label for={@uploads.image.ref}>image</label>
+<.live_file_input upload={@uploads.image} />
+  <button type="submit">Submit</button>
+</form> --%>
+
+<.live_component
+  module={SignbankWeb.SignLive.FormComponent}
+  id={@sign.id || :new}
+  title={@page_title}
+  action={@live_action}
+  sign={@sign}
+  patch={~p"/dictionary/sign/#{@sign.id_gloss}/edit"}
+/>

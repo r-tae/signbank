@@ -1,6 +1,7 @@
 # TODO: this was from `gen.live`, look over it again
 defmodule SignbankWeb.SignLive.FormComponent do
   use SignbankWeb, :live_component
+  import SignbankWeb.Gettext
 
   alias Signbank.Dictionary
 
@@ -8,11 +9,6 @@ defmodule SignbankWeb.SignLive.FormComponent do
   def render(assigns) do
     ~H"""
     <div>
-      <.header>
-        <%= @title %>
-        <:subtitle>Use this form to manage sign records in your database.</:subtitle>
-      </.header>
-
       <.simple_form
         for={@form}
         id="sign-form"
@@ -20,12 +16,34 @@ defmodule SignbankWeb.SignLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:id_gloss]} label="ID gloss" />
-        <.input field={@form[:annotation_id_gloss]} label="Annotation ID Gloss" />
-        <.input field={@form[:translations]} label="translations" />
+        <.inputs_for :let={vid} field={@form[:videos]}>
+          <.input field={vid[:url]} />
+        </.inputs_for>
+        <label for={@uploads.video.ref}>Add new video</label>
+        <.live_file_input upload={@uploads.video} />
+        <.input field={@form[:id_gloss]} label={gettext("ID gloss")} />
+        <.input field={@form[:annotation_id_gloss]} label={gettext("Annotation ID gloss")} />
+        <.input
+          field={@form[:translations]}
+          label={gettext("Translations")}
+          value={
+            @form[:translations].value
+            |> List.wrap()
+            |> Enum.join(", ")
+          }
+        />
+        <.input field={@form[:variant_of]} label={gettext("Variant of")} />
+        <%!-- TODO: regions --%>
+        <%!-- TODO: phonology --%>
+        <%!-- TODO: morphology --%>
+        <%!-- TODO: relations --%>
+        <%!-- TODO: definitions --%>
+        <%!-- TODO: publish button --%>
+        <%!-- TODO: language --%>
+        <%!-- TODO: tags --%>
 
         <:actions>
-          <.button phx-disable-with="Saving...">Save Sign</.button>
+          <.button phx-disable-with={gettext("Saving...")}><%= gettext("Save sign") %></.button>
         </:actions>
       </.simple_form>
     </div>
@@ -39,25 +57,67 @@ defmodule SignbankWeb.SignLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign_form(changeset)}
+     |> assign_form(changeset)
+     |> allow_upload(:video, accept: ~w(.jpg .jpeg .png), max_entries: 1)}
   end
 
   @impl true
   def handle_event("validate", %{"sign" => sign_params}, socket) do
     changeset =
       socket.assigns.sign
-      |> Dictionary.change_sign(sign_params)
+      |> Dictionary.change_sign(cast_translations(sign_params))
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
   end
 
   def handle_event("save", %{"sign" => sign_params}, socket) do
+    sign_params =
+      sign_params
+      |> cast_translations()
+      |> with_video_url(socket)
+
     save_sign(socket, socket.assigns.action, sign_params)
   end
 
+  defp cast_translations(%{"translations" => translations} = params) do
+    Map.put(
+      params,
+      "translations",
+      translations
+      |> String.split(",")
+      |> Enum.map(&String.trim(&1))
+    )
+  end
+
+  defp cast_translations(params), do: params
+
+  defp with_video_url(sign_params, socket) do
+    uploaded_files =
+      consume_uploaded_entries(socket, :video, fn _, entry ->
+        {:ok, SimpleS3Upload.entry_url(entry)}
+      end)
+
+    # check if there were uploaded files
+    # assume there are
+
+    Map.put(
+      sign_params,
+      "videos",
+      [
+        %{
+          sign_id: socket.assigns.sign.id,
+          url: Enum.at(uploaded_files, 0)
+        }
+      ]
+    )
+  end
+
   defp save_sign(socket, :edit, sign_params) do
-    case Dictionary.update_sign(socket.assigns.sign, sign_params) do
+    case Dictionary.update_sign(
+           socket.assigns.sign,
+           sign_params
+         ) do
       {:ok, sign} ->
         notify_parent({:saved, sign})
 

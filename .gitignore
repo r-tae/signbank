@@ -40,3 +40,12 @@ npm-debug.log
 
 # Ignore ssr build for svelte.
 /priv/svelte/
+
+# Minio storage, just for local development
+s3/
+/priv/static/archive_assets
+
+.DS_Store
+
+.env
+.env.*

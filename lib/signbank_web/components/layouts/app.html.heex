@@ -1,12 +1,25 @@
-<header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+<header class="navbar">
+  <nav>
     <div class="flex items-center gap-4">
+      <%!-- home about auslan research vocabulary grammar --%>
       <%!-- TODO: logo styling/layout --%>
       <a href="/">
         <img src={~p"/images/logo.svg"} />
       </a>
     </div>
-  </div>
+    <ul>
+      <li><.link href={~p"/"}><%= SignbankWeb.Gettext.gettext("Home") %></.link></li>
+      <li><.link href={~p"/about"}><%= SignbankWeb.Gettext.gettext("About Auslan") %></.link></li>
+      <li><.link href={~p"/research"}><%= SignbankWeb.Gettext.gettext("Research") %></.link></li>
+      <li>
+        <.link href={~p"/vocabulary"}><%= SignbankWeb.Gettext.gettext("Vocabulary") %></.link>
+      </li>
+      <li><.link href={~p"/grammar"}><%= SignbankWeb.Gettext.gettext("Grammar") %></.link></li>
+      <li>
+        <.link href={~p"/dictionary"}><%= SignbankWeb.Gettext.gettext("Dictionary") %></.link>
+      </li>
+    </ul>
+  </nav>
 </header>
 <main class="px-4 py-20 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl">

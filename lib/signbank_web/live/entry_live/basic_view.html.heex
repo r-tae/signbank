@@ -1,0 +1,30 @@
+<%!-- TODO: this was from `gen.live`, look over it again --%>
+<%!-- TODO: fix this markup, they were `.header` but that isn't useful anymore --%>
+<div class="entry-page__columns">
+  <div class="entry-page__column">
+    <nav class="entry-page__switch-entry">
+      To see more technical information
+      <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}/linguistic"} phx-click={JS.push_focus()}>
+        go to the linguistic dictionary view.
+      </.link>
+    </nav>
+
+    <div class={["video-frame", video_frame_class(@sign)]}>
+      <p class="video-frame__sign-type"><%= @sign.type %></p>
+      <%!-- TODO: refactor to support variant videos (we want to include the thing with the multiple videos, this may require svelte) --%>
+      <video controls muted autoplay width="600">
+        <%!-- TODO: move this to an envvar --%>
+        <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{Enum.at(@sign.videos,0).url}"} />
+      </video>
+    </div>
+    <%!-- translations --%>
+    <strong>Translations:</strong> <%= Enum.join(@sign.translations || [], ", ") %>
+  </div>
+  <div class="entry-page__column">
+    <.definitions definitions={@sign.definitions} />
+  </div>
+</div>
+
+<%!-- definitions --%>
+
+<%!-- seealso/ant --%>

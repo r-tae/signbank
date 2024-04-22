@@ -19,8 +19,8 @@ defmodule Signbank.Application do
       # Start a worker by calling: Signbank.Worker.start_link(arg)
       # {Signbank.Worker, arg},
       # Start to serve requests, typically the last entry
-      SignbankWeb.Endpoint,
-      :systemd.ready()
+      :systemd.ready(),
+      SignbankWeb.Endpoint
     ]
 
     choose_logger()
