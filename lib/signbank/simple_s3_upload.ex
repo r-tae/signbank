@@ -106,7 +106,7 @@ defmodule SimpleS3Upload do
     %{
       uploader: "S3",
       key: s3_filepath,
-      url: "#{upload_url}/#{bucket()}",
+      url: "#{upload_url()}/#{bucket()}",
       fields: fields
     }
   end
@@ -136,7 +136,7 @@ defmodule SimpleS3Upload do
       uploader: "S3",
       key: s3_filepath,
       # url: "https://#{bucket()}.s3.amazonaws.com",
-      url: "#{upload_url}/#{bucket()}",
+      url: "#{upload_url()}/#{bucket()}",
       fields: fields
     }
 
