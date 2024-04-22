@@ -24,7 +24,7 @@ config :signbank, SimpleS3Upload,
   access_key_id: System.get_env("S3_ACCESS_KEY_ID"),
   secret_access_key: System.get_env("S3_SECRET_ACCESS_KEY"),
   bucket: System.get_env("S3_BUCKET"),
-  region: System.get_env("S3_REGION")
+  region: System.get_env("S3_REGION"),
   base_url: System.get_env("S3_BASE_URL")
 
 config :signbank, :media_url, System.get_env("MEDIA_URL")

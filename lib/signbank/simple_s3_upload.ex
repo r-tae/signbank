@@ -72,6 +72,18 @@ defmodule SimpleS3Upload do
     {:ok, fields}
   end
 
+  def bucket do
+    Application.fetch_env!(:signbank, SimpleS3Upload)[:bucket]
+  end
+
+  def region do
+    Application.fetch_env!(:signbank, SimpleS3Upload)[:region]
+  end
+
+  def upload_url do
+    Application.fetch_env!(:signbank, SimpleS3Upload)[:base_url]
+  end
+
   defp config do
     %{
       region: region(),
@@ -99,25 +111,13 @@ defmodule SimpleS3Upload do
     }
   end
 
-  def bucket do
-    Application.fetch_env!(:signbank, SimpleS3Upload)[:bucket]
-  end
-
-  def region do
-    Application.fetch_env!(:signbank, SimpleS3Upload)[:region]
-  end
-
-  def upload_url do
-    Application.fetch_env!(:signbank, SimpleS3Upload)[:base_url]
-  end
-
   def s3_filepath(entry) do
     "#{entry.uuid}.#{ext(entry)}"
   end
 
   def entry_url(entry) do
     # "http://#{bucket()}.s3.#{region()}.amazonaws.com/#{entry.uuid}.#{ext(entry)}"
-    "#{Application.fetch_env!(:signbank, :media_url),}/#{bucket()}/#{entry.uuid}.#{ext(entry)}"
+    "#{Application.fetch_env!(:signbank, :media_url)}/#{bucket()}/#{entry.uuid}.#{ext(entry)}"
   end
 
   def presign_entry(entry, socket) do
