@@ -94,8 +94,7 @@ defmodule SimpleS3Upload do
     %{
       uploader: "S3",
       key: s3_filepath,
-      # url: "https://#{bucket()}.s3.#{region()}.amazonaws.com",
-      url: "http://127.0.0.1:9000/#{bucket()}",
+      url: "#{upload_url}/#{bucket()}",
       fields: fields
     }
   end
@@ -108,13 +107,17 @@ defmodule SimpleS3Upload do
     Application.fetch_env!(:signbank, SimpleS3Upload)[:region]
   end
 
+  def upload_url do
+    Application.fetch_env!(:signbank, SimpleS3Upload)[:base_url]
+  end
+
   def s3_filepath(entry) do
     "#{entry.uuid}.#{ext(entry)}"
   end
 
   def entry_url(entry) do
     # "http://#{bucket()}.s3.#{region()}.amazonaws.com/#{entry.uuid}.#{ext(entry)}"
-    "http://127.0.0.1:9000/#{bucket()}/#{entry.uuid}.#{ext(entry)}"
+    "#{Application.fetch_env!(:signbank, :media_url),}/#{bucket()}/#{entry.uuid}.#{ext(entry)}"
   end
 
   def presign_entry(entry, socket) do
@@ -133,7 +136,7 @@ defmodule SimpleS3Upload do
       uploader: "S3",
       key: s3_filepath,
       # url: "https://#{bucket()}.s3.amazonaws.com",
-      url: "http://127.0.0.1:9000/#{bucket()}",
+      url: "#{upload_url}/#{bucket()}",
       fields: fields
     }
 

@@ -25,8 +25,9 @@ config :signbank, SimpleS3Upload,
   secret_access_key: System.get_env("S3_SECRET_ACCESS_KEY"),
   bucket: System.get_env("S3_BUCKET"),
   region: System.get_env("S3_REGION")
+  base_url: System.get_env("S3_BASE_URL")
 
-config :signbank, :media_url, System.get_env("MEDIA_BASE_URL")
+config :signbank, :media_url, System.get_env("MEDIA_URL")
 
 if config_env() == :prod do
   database_url =
