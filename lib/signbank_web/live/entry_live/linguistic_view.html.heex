@@ -1,14 +1,13 @@
 <%!-- TODO: this was from `gen.live`, look over it again --%>
 <%!-- TODO: fix this markup, they were `.header` but that isn't useful anymore --%>
+<nav class="entry-page__switch-entry">
+  This page contains technical linguistic information about the sign.
+  <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}"} phx-click={JS.push_focus()}>
+    Go to the regular dictionary view.
+  </.link>
+</nav>
 <div class="entry-page__columns">
   <div class="entry-page__column">
-    <nav class="entry-page__switch-entry">
-      This page contains technical linguistic information about the sign.
-      <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}"} phx-click={JS.push_focus()}>
-        Go to the regular dictionary view.
-      </.link>
-    </nav>
-
     <%!-- TODO: add video --%>
     <%!-- TODO: add variants (somehow) --%>
     <%!-- TODO: make video bigger --%>
@@ -23,7 +22,7 @@
         <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{Enum.at(@sign.videos,0).url}"} />
       </video>
     </div>
-    <strong>Translations:</strong> <%= Enum.join(@sign.translations || [], ", ") %>
+    <p><strong>Keywords:</strong> <%= Enum.join(@sign.translations || [], ", ") %></p>
   </div>
   <div class="entry-page__column">
     <table class="summary-table">

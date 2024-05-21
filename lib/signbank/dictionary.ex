@@ -59,7 +59,7 @@ defmodule Signbank.Dictionary do
         from(s in Sign,
           preload: [
             definitions: [],
-            variants: [],
+            variants: [videos: [], regions: []],
             regions: [],
             videos: [],
             active_video: []

@@ -1,39 +1,5 @@
 @use "region_map.scss";
-
-@font-face {
-  font-family: atkinson-hyperlegible;
-  src: url("../fonts/Atkinson-Hyperlegible-Regular-102a.woff2");
-  font-style: normal;
-  font-weight: normal;
-}
-
-@font-face {
-  font-family: atkinson-hyperlegible;
-  src: url("../fonts/Atkinson-Hyperlegible-Italic-102a.woff2");
-  font-style: italic;
-  font-weight: normal;
-}
-
-@font-face {
-  font-family: atkinson-hyperlegible;
-  src: url("../fonts/Atkinson-Hyperlegible-Bold-102a.woff2");
-  font-style: normal;
-  font-weight: bold;
-}
-
-@font-face {
-  font-family: atkinson-hyperlegible;
-  src: url("../fonts/Atkinson-Hyperlegible-BoldItalic-102a.woff2");
-  font-style: italic;
-  font-weight: bold;
-}
-
-@font-face {
-  font-family: hamnosys;
-  src: url("../fonts/hamnosysunicode-webfont.woff2") format("woff2"), url("../fonts/hamnosysunicode-webfont.ttf") format("ttf");
-  font-style: normal;
-  font-weight: normal;
-}
+@use "fonts.scss";
 
 body {
   -webkit-font-smoothing: antialiased;
@@ -54,8 +20,35 @@ html {
   box-sizing: inherit;
 }
 
-.app_version {
-  font-size: 0.8em;
+main {
+  padding: 1rem;
+}
+
+$footer-height: 4.5rem;
+
+#page-container {
+  position: relative;
+  min-height: 100vh;
+
+  #content-wrap {
+    padding-bottom: $footer-height;
+  }
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: $footer-height;
+  padding: 1rem 2rem;
+  background-color: #CACFD6; // TODO: move colors somewhere better
+  text-align: right;
+
+  .app_version {
+    text-align: center;
+    font-size: 0.8em;
+    margin: 0;
+  }
 }
 
 .navbar {
@@ -88,8 +81,6 @@ html {
       }
     }
   }
-
-  // flex items-center justify-between border-b border-zinc-100 py-3 text-sm
 }
 
 
@@ -156,14 +147,12 @@ html {
 }
 
 .entry-page__columns {
-  margin-top: 1em;
-
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  $gap: 2em;
+  $gap: 2rem;
   gap: $gap;
-  justify-content: center;
+  justify-content: space-between;
 
   .entry-page__column {
     height: 100%;
@@ -180,7 +169,7 @@ html {
 }
 
 .video-frame {
-  padding: 0.5em;
+  padding: 0.8rem;
   border-radius: 2px;
 
   &.headsign {
@@ -199,10 +188,28 @@ html {
     background-color: crimson;
   }
 
+  .video-frame__video_wrapper {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    display: flex;
+  }
+
+  .video-frame__video_wrapper video {
+    height: 100%;
+  }
+
+  .video-frame__video_wrapper svg {
+    height: 100%;
+    width: 100%;
+    transform: translateX(40%) translateY(-34%) scale(0.2);
+    position: absolute;
+  }
+
   .video-frame__sign-type {
+    position: absolute;
     font-size: 1.1em;
-    margin: 0;
-    margin-bottom: 0.5em;
+    margin: 0.4rem;
+    // margin-bottom: 0.5em;
     padding: 0.3em;
     background-color: transparentize($color: white, $amount: 0.05);
     border: 1px black solid;
