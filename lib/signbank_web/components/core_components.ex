@@ -731,6 +731,7 @@ defmodule SignbankWeb.CoreComponents do
     do: SignbankWeb.Gettext.gettext("Popular explanation")
 
   attr :type, :atom, values: [:basic, :linguistic], required: true
+  attr :definitions, :list, required: true
 
   def definitions(assigns) do
     definition_groups = group_definitions_by_role(assigns.definitions)

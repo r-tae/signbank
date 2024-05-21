@@ -30,13 +30,10 @@ defmodule SignbankWeb.SignLive.LinguisticView do
     end
   end
 
-  defp generate_initial_final_text(initial, final) when initial == final or final == nil do
-    "#{initial}"
-  end
+  defp generate_initial_final_text(initial, final) when initial == final or final == nil,
+    do: "#{initial}"
 
-  defp generate_initial_final_text(initial, final) do
-    "#{initial} → #{final}"
-  end
+  defp generate_initial_final_text(initial, final), do: "#{initial} → #{final}"
 
   defp video_frame_class(sign) do
     if String.starts_with?(sign.id_gloss, "FS") do
@@ -50,17 +47,17 @@ defmodule SignbankWeb.SignLive.LinguisticView do
     end
   end
 
-  defp video_frame_type(sign) do
-    type = video_frame_class(sign)
+  # defp video_frame_type(sign) do
+  #   type = video_frame_class(sign)
 
-    if type == "se_only" do
-      "Signed English only"
-    else
-      type
-    end
-  end
+  #   if type == "se_only" do
+  #     "Signed English only"
+  #   else
+  #     type
+  #   end
+  # end
 
-  defp bool_to_word(true), do: SignbankWeb.Gettext.gettext("yes")
-  defp bool_to_word(false), do: SignbankWeb.Gettext.gettext("no")
-  defp bool_to_word(_), do: SignbankWeb.Gettext.gettext("unknown")
+  # defp bool_to_word(true), do: SignbankWeb.Gettext.gettext("yes")
+  # defp bool_to_word(false), do: SignbankWeb.Gettext.gettext("no")
+  # defp bool_to_word(_), do: SignbankWeb.Gettext.gettext("unknown")
 end
