@@ -123,13 +123,13 @@ defmodule SignbankWeb.CoreComponents do
       {@rest}
     >
       <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
-        <.icon :if={@kind == :info} name="hero-information-circle-mini" class="h-4 w-4" />
-        <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="h-4 w-4" />
+        <Heroicons.information_circle :if={@kind == :info} class="icon--small" />
+        <Heroicons.exclamation_circle :if={@kind == :error} class="icon--small" />
         <%= @title %>
       </p>
-      <p class="mt-2 text-sm leading-5"><%= msg %></p>
+      <p class="flash__message"><%= msg %></p>
       <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
-        <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
+        <Heroicons.x_mark class="icon--small" />
       </button>
     </div>
     """
@@ -159,7 +159,7 @@ defmodule SignbankWeb.CoreComponents do
         hidden
       >
         <%= gettext("Attempting to reconnect") %>
-        <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
+        <Heroicons.arrow_path class="icon--mini animate-spin" />
       </.flash>
 
       <.flash
@@ -597,6 +597,7 @@ defmodule SignbankWeb.CoreComponents do
   def icon(%{name: "hero-" <> _} = assigns) do
     ~H"""
     <span class={[@name, @class]} />
+    <%!-- <Heroicons.LiveView.icon name={name} type="outline" /> --%>
     """
   end
 
@@ -679,7 +680,6 @@ defmodule SignbankWeb.CoreComponents do
     :deictic,
     :question,
     :interact,
-    :popular_explanation,
     :note,
     :privatenote
   ]
@@ -707,9 +707,6 @@ defmodule SignbankWeb.CoreComponents do
   defp definition_role_to_string(:question), do: SignbankWeb.Gettext.gettext("As a question")
   defp definition_role_to_string(:interact), do: SignbankWeb.Gettext.gettext("Interactive")
 
-  defp definition_role_to_string(:popular_explanation),
-    do: SignbankWeb.Gettext.gettext("Popular explanation")
-
   defp definition_role_to_string(:note), do: SignbankWeb.Gettext.gettext("Note")
   defp definition_role_to_string(:privatenote), do: SignbankWeb.Gettext.gettext("Private note")
 
@@ -736,4 +733,10 @@ defmodule SignbankWeb.CoreComponents do
     </div>
     """
   end
+
+  # def info_button(assigns) do
+  #   ~H"""
+  #   <button>
+  #   """
+  # end
 end

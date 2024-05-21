@@ -62,7 +62,10 @@ defmodule Signbank.MixProject do
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:systemd, "~> 0.6"},
       {:dart_sass, "~> 0.6", runtime: Mix.env() == :dev},
-      {:scrivener_ecto, "~> 2.7"}
+      {:scrivener_ecto, "~> 2.7"},
+      {:ex_cldr, "~> 2.38"},
+      {:ex_cldr_lists, "~> 2.11"},
+      {:heroicons, "~> 0.5.5"}
     ]
   end
 

@@ -49,4 +49,18 @@ defmodule SignbankWeb.SignLive.LinguisticView do
       end
     end
   end
+
+  defp video_frame_type(sign) do
+    type = video_frame_class(sign)
+
+    if type == "se_only" do
+      "Signed English only"
+    else
+      type
+    end
+  end
+
+  defp bool_to_word(true), do: SignbankWeb.Gettext.gettext("yes")
+  defp bool_to_word(false), do: SignbankWeb.Gettext.gettext("no")
+  defp bool_to_word(_), do: SignbankWeb.Gettext.gettext("unknown")
 end

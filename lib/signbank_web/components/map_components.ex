@@ -4,6 +4,46 @@ defmodule SignbankWeb.MapComponents do
   """
   use Phoenix.Component
 
+  defp generate_alt_text([]), do: "no states"
+
+  defp generate_alt_text(selected) do
+    # HACK: this way of listing states cannot be reliably localised
+    selected
+    |> Enum.flat_map(fn
+      %{region: :southern} -> ["the southern states"]
+      %{region: :northern} -> ["the northen states"]
+      %{region: region} -> [Atom.to_string(region)]
+    end)
+    |> Signbank.Cldr.List.to_string!(locale: Signbank.Cldr.get_locale().cldr_locale_name)
+  end
+
+  defp generate_classes(selected) do
+    selected
+    |> Enum.map(& &1.region)
+    |> Enum.map_join(" ", fn
+      :australia_wide -> "region_map_svg__select_aus"
+      :northern -> "region_map_svg__select_nth"
+      :southern -> "region_map_svg__select_sth"
+      :new_south_wales -> "region_map_svg__select_nsw"
+      :northern_territory -> "region_map_svg__select_nt"
+      :queensland -> "region_map_svg__select_qld"
+      :south_australia -> "region_map_svg__select_sa"
+      :tasmania -> "region_map_svg__select_tas"
+      :victoria -> "region_map_svg__select_vic"
+      :western_australia -> "region_map_svg__select_wa"
+    end)
+  end
+
+  defp show_map?(selected) do
+    Enum.any?(
+      selected,
+      fn
+        %{region: :australia_wide} -> false
+        _ -> true
+      end
+    )
+  end
+
   @doc """
   Renders a map of australia, takes a list of regions to highlight.
   """
@@ -26,36 +66,39 @@ defmodule SignbankWeb.MapComponents do
 
   # TODO: bring up a modal with region names on click
   def australia_map(assigns) do
-    selected =
-      assigns.selected
-      |> Enum.map(& &1.region)
-      |> Enum.map_join(" ", fn
-        :australia_wide -> "region_map_svg__select_aus"
-        :northern -> "region_map_svg__select_nth"
-        :southern -> "region_map_svg__select_sth"
-        :new_south_wales -> "region_map_svg__select_nsw"
-        :northern_territory -> "region_map_svg__select_nt"
-        :queensland -> "region_map_svg__select_qld"
-        :south_australia -> "region_map_svg__select_sa"
-        :tasmania -> "region_map_svg__select_tas"
-        :victoria -> "region_map_svg__select_vic"
-        :western_australia -> "region_map_svg__select_wa"
-      end)
+    # selected_classes =
+    #   assigns.selected
+    #   |> Enum.map(& &1.region)
+    #   |> Enum.map_join(" ", fn
+    #     :australia_wide -> "region_map_svg__select_aus"
+    #     :northern -> "region_map_svg__select_nth"
+    #     :southern -> "region_map_svg__select_sth"
+    #     :new_south_wales -> "region_map_svg__select_nsw"
+    #     :northern_territory -> "region_map_svg__select_nt"
+    #     :queensland -> "region_map_svg__select_qld"
+    #     :south_australia -> "region_map_svg__select_sa"
+    #     :tasmania -> "region_map_svg__select_tas"
+    #     :victoria -> "region_map_svg__select_vic"
+    #     :western_australia -> "region_map_svg__select_wa"
+    #   end)
 
-    assigns = assign(assigns, selected: selected)
+    # assigns = assign(assigns, selected: selected)
 
     # HACK: per convo with LW 2023-08-23, temporary measure to hide aus-wide maps
     ~H"""
     <svg
-      :if={@selected != "region_map_svg__select_aus"}
+      :if={show_map?(@selected)}
       xmlns:svg="http://www.w3.org/2000/svg"
       xmlns="http://www.w3.org/2000/svg"
       version="1.0"
       width="100"
       height="93"
       viewBox="0 0 200 186"
-      class={Enum.join([@class, "region_map_svg", @selected], " ")}
+      class={Enum.join([@class, "region_map_svg", generate_classes(@selected)], " ")}
     >
+      <title>
+        A map of australia with <%= generate_alt_text(@selected) %> selected.
+      </title>
       <g id="root" fill="#d3d3d3" stroke="black">
         <path
           id="NSW"
