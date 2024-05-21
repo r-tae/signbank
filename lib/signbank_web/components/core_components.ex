@@ -681,8 +681,25 @@ defmodule SignbankWeb.CoreComponents do
     :question,
     :interact,
     :note,
-    :privatenote
+    :privatenote,
+    :popular_explanation
   ]
+
+  @basic_definitions [
+    :general,
+    :auslan,
+    :noun,
+    :verb,
+    :modifier,
+    :augment,
+    :deictic,
+    :question,
+    :interact,
+    :note
+  ]
+
+  defp only_basic_definitions({role, _defs}) when role in @basic_definitions, do: true
+  defp only_basic_definitions(_), do: false
 
   defp group_definitions_by_role(definitions) do
     definitions
@@ -710,12 +727,22 @@ defmodule SignbankWeb.CoreComponents do
   defp definition_role_to_string(:note), do: SignbankWeb.Gettext.gettext("Note")
   defp definition_role_to_string(:privatenote), do: SignbankWeb.Gettext.gettext("Private note")
 
+  defp definition_role_to_string(:popular_explanation),
+    do: SignbankWeb.Gettext.gettext("Popular explanation")
+
+  attr :type, :atom, values: [:basic, :linguistic], required: true
+
   def definitions(assigns) do
+    definition_groups = group_definitions_by_role(assigns.definitions)
+
     assigns =
       assign(
         assigns,
         :def_groups,
-        group_definitions_by_role(assigns.definitions)
+        if(assigns.type == :basic,
+          do: Enum.filter(definition_groups, &only_basic_definitions/1),
+          else: definition_groups
+        )
       )
 
     ~H"""

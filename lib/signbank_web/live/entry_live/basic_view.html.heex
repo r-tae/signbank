@@ -21,7 +21,7 @@
     <strong>Translations:</strong> <%= Enum.join(@sign.translations || [], ", ") %>
   </div>
   <div class="entry-page__column">
-    <.definitions definitions={@sign.definitions} />
+    <.definitions type={:basic} definitions={@sign.definitions} />
   </div>
 </div>
 
