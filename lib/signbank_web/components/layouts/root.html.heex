@@ -39,12 +39,16 @@
                 </.link>
               </li>
               <li>
-                <.link href={~p"/grammar"}><%= SignbankWeb.Gettext.gettext("Grammar") %></.link>
+                <.link href={~p"/about/grammar"}>
+                  <%= SignbankWeb.Gettext.gettext("Grammar") %>
+                </.link>
               </li>
               <li>
-                <.link href={~p"/dictionary"}>
-                  <%= SignbankWeb.Gettext.gettext("Dictionary") %>
-                </.link>
+                <%!-- phx-change="validate" --%>
+                <form action="/dictionary" method="GET">
+                  <input type="text" name="q" placeholder="Search..." />
+                  <button type="submit"><Heroicons.magnifying_glass /></button>
+                </form>
               </li>
             </ul>
           </nav>

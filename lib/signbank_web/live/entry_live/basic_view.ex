@@ -1,6 +1,7 @@
 # TODO: this was from `gen.live`, look over it again
 defmodule SignbankWeb.SignLive.BasicView do
   use SignbankWeb, :live_view
+
   import SignbankWeb.Gettext
   alias Signbank.Dictionary
 

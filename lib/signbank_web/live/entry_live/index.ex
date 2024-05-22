@@ -19,16 +19,12 @@ defmodule SignbankWeb.SignLive.Index do
         {:noreply,
          socket
          |> apply_action(socket.assigns.live_action, params)
-         |> assign(:error, "No results found.")}
+         |> assign(:error, "No results found.")
+         |> assign(:inexact_matches, [])}
 
       {:ok, [[kw, id_gloss]]} ->
         {:noreply, push_patch(socket, to: ~p"/dictionary/sign/#{id_gloss}?q=#{kw}")}
 
-        {:noreply,
-         socket
-         |> apply_action(socket.assigns.live_action, params)}
-
-      # redirect
       {:ok, inexact_matches} ->
         {:noreply,
          socket
@@ -40,7 +36,8 @@ defmodule SignbankWeb.SignLive.Index do
         {:noreply,
          socket
          |> apply_action(socket.assigns.live_action, params)
-         |> assign(:error, msg)}
+         |> assign(:error, msg)
+         |> assign(:inexact_matches, [])}
     end
   end
 
