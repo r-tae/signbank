@@ -1,22 +1,28 @@
 <%!-- TODO: this was from `gen.live`, look over it again --%>
 <%!-- TODO: fix this markup, they were `.header` but that isn't useful anymore --%>
-<nav class="entry-page__switch-entry">
-  To see more technical information
-  <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}/linguistic"} phx-click={JS.push_focus()}>
-    go to the linguistic dictionary view.
-  </.link>
+<nav class="entry-page__switch-entry" style="display: flex; justify-content: space-between;">
+  <p>
+    To see more technical information
+    <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}/linguistic"} phx-click={JS.push_focus()}>
+      go to the linguistic dictionary view.
+    </.link>
+  </p>
+  <p :if={not Enum.empty?(@search_results) and @search_query}>
+    <%= for {result, index} <- Enum.with_index(@search_results) do %>
+      <.link
+        class="entry-page__search_result"
+        patch={~p"/dictionary/sign/#{result.id_gloss}?q=#{@search_query}"}
+        phx-click={JS.push_focus()}
+      >
+        <%= index + 1 %>
+      </.link>
+    <% end %>
+  </p>
 </nav>
+
 <div class="entry-page__columns">
   <div class="entry-page__column">
     <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} />
-
-    <%!-- <div class="entry-page__videos_scroller">
-      <.video_frame sign={@sign} />
-      <%= for variant <- @sign.variants do %>
-        <.video_frame sign={variant} />
-      <% end %>
-    </div> --%>
-    <%!-- translations --%>
     <p><strong>Keywords:</strong> <%= Enum.join(@sign.translations || [], ", ") %></p>
   </div>
   <div class="entry-page__column">

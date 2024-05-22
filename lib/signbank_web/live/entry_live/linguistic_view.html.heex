@@ -1,10 +1,22 @@
 <%!-- TODO: this was from `gen.live`, look over it again --%>
 <%!-- TODO: fix this markup, they were `.header` but that isn't useful anymore --%>
+
 <nav class="entry-page__switch-entry">
   This page contains technical linguistic information about the sign.
-  <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}"} phx-click={JS.push_focus()}>
-    Go to the regular dictionary view.
-  </.link>
+  <%!--
+    We want to avoid sending people to the basic view of a variant entry, really we
+    should just redirect if anyone lands there because they may manually change the
+    URL
+   --%>
+  <%= if @sign.type == :variant do %>
+    <.link patch={~p"/dictionary/sign/#{@sign.headsign.id_gloss}"} phx-click={JS.push_focus()}>
+      Go to the regular dictionary view.
+    </.link>
+  <% else %>
+    <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}"} phx-click={JS.push_focus()}>
+      Go to the regular dictionary view.
+    </.link>
+  <% end %>
 </nav>
 <div class="entry-page__columns">
   <div class="entry-page__column">
@@ -347,26 +359,29 @@
       </div>
     </details>
 
-    <details class="ling-details-section">
-      <summary>
-        <h2>Semantics</h2>
-      </summary>
-
-      <div class="ling-details-section__body">
-        <p>
-          The aim is to put these categories here
-        </p>
-      </div>
-    </details>
-
     <.definitions type={:linguistic} definitions={@sign.definitions} />
 
-    <%!-- TODO: display videos/etc --%>
-    <%= for variant <- @sign.variants do %>
-      <div title="variant">
-        <%= variant.id_gloss %>
+    <p :if={@sign.type == :headsign}>
+      <h4>Variants</h4>
+      <%!-- TODO: display videos/etc --%>
+      <%= for variant <- @sign.variants do %>
+        <div title="variant" style="margin-bottom: 3rem">
+          <.link href={~p"/dictionary/sign/#{variant.id_gloss}/linguistic"}>
+            <%= variant.id_gloss %>
+          </.link>
+        </div>
+      <% end %>
+    </p>
+
+    <p :if={@sign.type == :variant}>
+      <h4>Headsign</h4>
+      <%!-- TODO: display videos/etc --%>
+      <div title="variant" style="margin-bottom: 3rem">
+        <.link href={~p"/dictionary/sign/#{@sign.headsign.id_gloss}/linguistic"}>
+          <%= @sign.headsign.id_gloss %>
+        </.link>
       </div>
-    <% end %>
+    </p>
 
     <%!-- TODO: just navigate back? --%>
     <.back navigate={~p"/dictionary"}>Back to signs</.back>

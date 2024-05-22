@@ -13,35 +13,13 @@ defmodule SignbankWeb.SignLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
-    case Dictionary.fuzzy_find_keyword(Map.get(params, "q")) do
-      # prompt for options
-      {:ok, []} ->
-        {:noreply,
-         socket
-         |> apply_action(socket.assigns.live_action, params)
-         |> assign(:error, "No results found.")}
+    page = Dictionary.list_signs(String.to_integer(Map.get(params, "page", "1")))
 
-      {:ok, [[kw, id_gloss]]} ->
-        {:noreply, push_patch(socket, to: ~p"/dictionary/sign/#{id_gloss}?q=#{kw}")}
-
-        {:noreply,
-         socket
-         |> apply_action(socket.assigns.live_action, params)}
-
-      # redirect
-      {:ok, inexact_matches} ->
-        {:noreply,
-         socket
-         |> apply_action(socket.assigns.live_action, params)
-         |> assign(:inexact_matches, inexact_matches)}
-
-      # prompt for options
-      {:err, msg} ->
-        {:noreply,
-         socket
-         |> apply_action(socket.assigns.live_action, params)
-         |> assign(:error, msg)}
-    end
+    {:noreply,
+     socket
+     |> assign(:page, page)
+     |> apply_action(socket.assigns.live_action, params)
+     |> stream(:signs, page, reset: true)}
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do

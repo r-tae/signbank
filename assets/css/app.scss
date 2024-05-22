@@ -126,6 +126,12 @@ footer {
   }
 }
 
+
+.entry-page__search_result {
+  padding: 0.5em 1em;
+  border: solid 1px black;
+}
+
 .entry-page__switch-entry {
   margin-bottom: 1em;
   font-size: 1.1em;
@@ -190,7 +196,7 @@ footer {
 
   .video-frame__video_wrapper {
     position: relative;
-    aspect-ratio: 4 / 3;
+    // aspect-ratio: 4 / 3;
     display: flex;
   }
 

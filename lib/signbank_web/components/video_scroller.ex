@@ -21,6 +21,7 @@ defmodule VideoScroller do
         #previous_variant { left: 0; }
       </style>
       <button
+        :if={not Enum.empty?(@sign.variants)}
         id="previous_variant"
         href="#"
         phx-click="previous"
@@ -30,6 +31,7 @@ defmodule VideoScroller do
         <Heroicons.arrow_left class="icon--small" />
       </button>
       <button
+        :if={not Enum.empty?(@sign.variants)}
         id="next_variant"
         href="#"
         phx-click="next"
@@ -73,7 +75,12 @@ defmodule VideoScroller do
           <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{Enum.at(@sign.videos,0).url}"} />
         </video>
         <div class="video-frame__sign-type">
-          <%= if @sign.type == :headsign, do: "stem", else: "variant" %>
+          <%= cond do
+            String.starts_with?(@sign.id_gloss, "FS") -> "fingerspelled"
+            @sign.signed_english_only -> "se_only"
+            @sign.type == :headsign -> "stem"
+            @sign.type == :variant -> "variant"
+          end %>
         </div>
         <.australia_map selected={@sign.regions} />
       </div>

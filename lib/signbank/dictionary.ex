@@ -58,6 +58,7 @@ defmodule Signbank.Dictionary do
       Repo.get_by!(
         from(s in Sign,
           preload: [
+            headsign: [],
             definitions: [],
             variants: [videos: [], regions: []],
             regions: [],
@@ -67,6 +68,55 @@ defmodule Signbank.Dictionary do
         ),
         id_gloss: id_gloss
       )
+
+  def get_sign_by_keyword!(keyword),
+    do:
+      Repo.all(
+        from(s in Sign,
+          preload: [
+            headsign: [],
+            definitions: [],
+            variants: [videos: [], regions: []],
+            regions: [],
+            videos: [],
+            active_video: []
+          ],
+          where:
+            fragment("?=any(lower(translations ::text)::text[])", ^keyword) and
+              s.type == :headsign
+        )
+      )
+
+  @doc """
+  Either
+  """
+  def fuzzy_find_keyword(query) do
+    case Repo.query(
+           """
+           select id_gloss, translation, levenshtein(s2.translation, $1) distance from
+           (select unnest(signs.translations) as translation, id_gloss, "type" from signs
+           where "type" = 'headsign') s2
+           where levenshtein(translation, $1) < 3
+           order by "distance" asc;
+           """,
+           [query]
+         ) do
+      {:ok, %Postgrex.Result{rows: rows}} ->
+        case rows do
+          [[id_gloss, keyword, 0] | _] ->
+            {:ok, [[keyword, id_gloss]]}
+
+          _ ->
+            {:ok,
+             rows
+             |> Enum.map(fn r -> tl(Enum.reverse(r)) end)
+             |> Enum.uniq_by(fn [kw, _] -> kw end)}
+        end
+
+      _ ->
+        {:err, "No results found."}
+    end
+  end
 
   @doc """
   Creates a sign.
