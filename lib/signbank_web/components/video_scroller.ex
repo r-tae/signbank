@@ -1,4 +1,7 @@
 defmodule VideoScroller do
+  @moduledoc """
+  Shows a sign and its variants in a carosel.
+  """
   use SignbankWeb, :live_component
 
   def render(assigns) do
@@ -40,7 +43,7 @@ defmodule VideoScroller do
       >
         <Heroicons.arrow_right class="icon--small" />
       </button>
-      <.video_frame id={"variant_video_#{@counter}"} sign={Enum.at(@videos, @counter)} />
+      <.video_frame id={"variant_video_#{@sign.id}_#{@counter}"} sign={Enum.at(@videos, @counter)} />
     </div>
     """
   end

@@ -7,9 +7,11 @@
       go to the linguistic dictionary view.
     </.link>
   </p>
-  <p :if={not Enum.empty?(@search_results) and @search_query}>
+  <%!-- <p :if={@search_query != nil and not Enum.empty?(@search_results)}> --%>
+  <p>
     <%= for {result, index} <- Enum.with_index(@search_results) do %>
       <.link
+        id={"search_result_#{result.id_gloss}"}
         class="entry-page__search_result"
         patch={~p"/dictionary/sign/#{result.id_gloss}?q=#{@search_query}"}
         phx-click={JS.push_focus()}

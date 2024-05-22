@@ -130,6 +130,9 @@ footer {
 .entry-page__search_result {
   padding: 0.5em 1em;
   border: solid 1px black;
+  text-decoration: none;
+  color: black;
+  border-collapse: collapse;
 }
 
 .entry-page__switch-entry {

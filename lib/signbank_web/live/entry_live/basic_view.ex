@@ -16,18 +16,21 @@ defmodule SignbankWeb.SignLive.BasicView do
     search_query = Map.get(params, "q")
     search_results = Dictionary.get_sign_by_keyword!(search_query)
 
-    if Enum.count(search_results),
-      do:
+    socket =
+      if Enum.count(search_results) > 0 do
         socket
         |> assign(:search_results, search_results)
         |> assign(:search_query, search_query)
+      else
+        socket
+        |> assign(:search_results, [])
+        |> assign(:search_query, nil)
+      end
 
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:sign, Dictionary.get_sign_by_id_gloss!(id_gloss))
-     |> assign(:search_results, [])
-     |> assign(:search_query, nil)}
+     |> assign(:sign, Dictionary.get_sign_by_id_gloss!(id_gloss))}
   end
 
   # TODO: fix the page title
