@@ -13,16 +13,12 @@ defmodule SignbankWeb.SignLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
-    case Dictionary.fuzzy_find_keyword(Map.get(params, "q")) do
-      # prompt for options
-      {:ok, []} ->
-        {:noreply,
-         socket
-         |> apply_action(socket.assigns.live_action, params)
-         |> assign(:error, "No results found.")
-         |> assign(:inexact_matches, [])}
+    socket = assign(socket, :inexact_matches, [])
+    socket = assign(socket, :error, nil)
 
-      {:ok, [[kw, id_gloss]]} ->
+    # TODO: use actual set region preference
+    case Dictionary.fuzzy_find_keyword(Map.get(params, "q"), :northern) do
+      {:ok, [[kw, id_gloss, _]]} ->
         {:noreply, push_patch(socket, to: ~p"/dictionary/sign/#{id_gloss}?q=#{kw}")}
 
       {:ok, inexact_matches} ->
@@ -31,13 +27,11 @@ defmodule SignbankWeb.SignLive.Index do
          |> apply_action(socket.assigns.live_action, params)
          |> assign(:inexact_matches, inexact_matches)}
 
-      # prompt for options
       {:err, msg} ->
         {:noreply,
          socket
          |> apply_action(socket.assigns.live_action, params)
-         |> assign(:error, msg)
-         |> assign(:inexact_matches, [])}
+         |> assign(:error, msg)}
     end
   end
 

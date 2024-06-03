@@ -1,4 +1,3 @@
-# TODO: this was from `gen.live`, look over it again
 defmodule Signbank.Dictionary do
   @moduledoc """
   The Dictionary context.
@@ -9,18 +8,36 @@ defmodule Signbank.Dictionary do
 
   alias Signbank.Dictionary.Sign
 
-  @doc """
-  Returns the list of signs.
+  @southern_states [:victoria, :new_south_wales, :tasmania]
+  @northern_states [:queensland, :western_australia]
+  @default_order [
+    :australia_wide,
+    :southern,
+    :northern,
+    :victoria,
+    :new_south_wales,
+    :queensland,
+    :western_australia,
+    :tasmania
+  ]
+  @southern_order [
+                    :australia_wide,
+                    :southern,
+                    :northern
+                  ] ++
+                    @southern_states ++
+                    @northern_states
+  @northern_order [
+                    :australia_wide,
+                    :northern,
+                    :southern
+                  ] ++
+                    @northern_states ++
+                    @southern_states
 
-  ## Examples
-
-      iex> list_signs()
-      [%Sign{}, ...]
-
-  """
-  def list_signs do
-    Repo.all(Sign)
-  end
+  defp sort_order(:northern), do: @northern_order
+  defp sort_order(:southern), do: @southern_order
+  defp sort_order(_), do: @default_order
 
   @doc """
   Returns a paginated list of signs.
@@ -53,6 +70,15 @@ defmodule Signbank.Dictionary do
   """
   def get_sign!(id), do: Repo.get!(Sign, id)
 
+  @doc """
+  Returns a sign with the given `id_gloss`.
+
+  ## Examples
+
+      iex> get_sign_by_id_gloss!("house1a")
+      %Sign{}
+
+  """
   def get_sign_by_id_gloss!(id_gloss),
     do:
       Repo.get_by!(
@@ -69,49 +95,104 @@ defmodule Signbank.Dictionary do
         id_gloss: id_gloss
       )
 
-  def get_sign_by_keyword!(keyword),
-    do:
-      Repo.all(
-        from(s in Sign,
-          preload: [
-            headsign: [],
-            definitions: [],
-            variants: [videos: [], regions: []],
-            regions: [],
-            videos: [],
-            active_video: []
-          ],
-          where:
-            fragment("?=any(lower(translations ::text)::text[])", ^keyword) and
-              s.type == :headsign
-        )
-      )
+  @doc """
+  Returns a sign with the given `id_gloss`. It only returns headsigns.
+
+  ## Examples
+
+      iex> get_sign_by_keyword!("house")
+      {:ok, [["house", "house1a"]]}
+
+      iex> get_sign_by_keyword!("hou")
+      {:ok, [["hour", "hour_clockface"], ["house", "house1a"]]}
+
+  """
+  def get_sign_by_keyword!(keyword, region_preference \\ :australia_wide) do
+    region_sorter = fn %Sign{regions: regions} ->
+      Enum.find_index(sort_order(region_preference), fn x ->
+        Atom.to_string(x) == Enum.at(regions, 0)
+        # TODO: deal with signs with multiple regions
+      end)
+    end
+
+    case Repo.all(
+           from(s in Sign,
+             preload: [
+               headsign: [],
+               definitions: [],
+               variants: [videos: [], regions: []],
+               regions: [],
+               videos: [],
+               active_video: []
+             ],
+             where:
+               fragment("?=any(lower(translations ::text)::text[])", ^keyword) and
+                 s.type == :headsign
+           )
+         ) do
+      [] -> {:err, "No signs with keyword #{keyword} found."}
+      results -> {:ok, results |> Enum.sort_by(region_sorter, :asc)}
+    end
+  end
 
   @doc """
-  Either
-  """
-  def fuzzy_find_keyword(query) do
-    case Repo.query(
-           """
-           select id_gloss, translation, levenshtein(s2.translation, $1) distance from
-           (select unnest(signs.translations) as translation, id_gloss, "type" from signs
-           where "type" = 'headsign') s2
-           where levenshtein(translation, $1) < 3
-           order by "distance" asc;
-           """,
-           [query]
-         ) do
-      {:ok, %Postgrex.Result{rows: rows}} ->
-        case rows do
-          [[id_gloss, keyword, 0] | _] ->
-            {:ok, [[keyword, id_gloss]]}
+  Returns [[keyword, id_gloss of first match (by region sort)]..]
 
-          _ ->
-            {:ok,
-             rows
-             |> Enum.map(fn r -> tl(Enum.reverse(r)) end)
-             |> Enum.uniq_by(fn [kw, _] -> kw end)}
-        end
+  If the search is not ambiguous (i.e., there is an exact keyword match and there
+  are no other keywords that start with `query`), then it only returns that one match.
+  """
+  def fuzzy_find_keyword(query, region_preference \\ :australia_wide) do
+    region_sorter = fn [_id_gloss, _kw, regions, _score] ->
+      Enum.find_index(sort_order(region_preference), fn x ->
+        Atom.to_string(x) == Enum.at(regions, 0)
+        # TODO: deal with signs with multiple regions
+      end)
+    end
+
+    results =
+      Repo.query(
+        """
+        select
+          id_gloss,
+          kw,
+          array(select region from sign_regions sr where sr.sign_id = s2.id) regions,
+          case
+            when starts_with(kw,$1) then 1.0
+            else similarity(kw,$1)
+          end similarity
+        from
+        (select id, unnest(translations) as kw, id_gloss, "type" from signs where "type" = 'headsign') s2
+        where similarity(kw,$1) > 0.4 or
+          starts_with(kw,$1);
+        """,
+        [query]
+      )
+
+    case results do
+      {:ok, %Postgrex.Result{rows: rows}} ->
+        results =
+          rows
+          |> Enum.group_by(fn [_id_gloss, kw, _regions, _similarity] -> kw end)
+          |> Enum.map(fn {kw, matches} ->
+            similarity = matches |> Enum.at(0) |> Enum.at(3)
+
+            [
+              kw,
+              matches
+              |> Enum.sort_by(region_sorter, :asc)
+              |> Enum.at(0)
+              |> Enum.at(0),
+              similarity
+            ]
+          end)
+
+        exact_match? = fn [_, _, similarity] -> similarity == 1.0 end
+
+        {:ok,
+         if(Enum.count(results, exact_match?) == 1,
+           do: results |> Enum.filter(exact_match?),
+           else: results
+         )}
 
       _ ->
         {:err, "No results found."}

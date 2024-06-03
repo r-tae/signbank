@@ -138,6 +138,10 @@ footer {
 .entry-page__switch-entry {
   margin-bottom: 1em;
   font-size: 1.1em;
+
+  p {
+    margin: 0;
+  }
 }
 
 .summary-table th {

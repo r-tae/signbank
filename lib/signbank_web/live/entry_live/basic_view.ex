@@ -14,7 +14,7 @@ defmodule SignbankWeb.SignLive.BasicView do
   def handle_params(params, _, socket) do
     id_gloss = Map.get(params, "id")
     search_query = Map.get(params, "q")
-    search_results = Dictionary.get_sign_by_keyword!(search_query)
+    {:ok, search_results} = Dictionary.get_sign_by_keyword!(search_query)
 
     socket =
       if Enum.count(search_results) > 0 do
