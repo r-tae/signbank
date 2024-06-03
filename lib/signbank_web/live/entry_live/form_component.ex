@@ -1,4 +1,3 @@
-# TODO: this was from `gen.live`, look over it again
 defmodule SignbankWeb.SignLive.FormComponent do
   use SignbankWeb, :live_component
   import SignbankWeb.Gettext

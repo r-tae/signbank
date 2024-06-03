@@ -1,4 +1,3 @@
-# TODO: this was from `gen.live`, look over it again
 defmodule Signbank.DictionaryFixtures do
   @moduledoc """
   This module defines test helpers for creating

@@ -1,4 +1,3 @@
-# TODO: this was from `gen.live`, look over it again
 defmodule SignbankWeb.SignLiveTest do
   use SignbankWeb.ConnCase
 

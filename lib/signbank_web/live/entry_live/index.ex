@@ -13,8 +13,10 @@ defmodule SignbankWeb.SignLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
-    socket = assign(socket, :inexact_matches, [])
-    socket = assign(socket, :error, nil)
+    socket =
+      socket
+      |> assign(:inexact_matches, [])
+      |> assign(:error, nil)
 
     # TODO: use actual set region preference
     case Dictionary.fuzzy_find_keyword(Map.get(params, "q"), :northern) do
