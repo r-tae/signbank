@@ -1,4 +1,3 @@
-# TODO: this was from `gen.live`, look over it again
 defmodule SignbankWeb.SignLive.BasicView do
   use SignbankWeb, :live_view
 
@@ -14,23 +13,24 @@ defmodule SignbankWeb.SignLive.BasicView do
   def handle_params(params, _, socket) do
     id_gloss = Map.get(params, "id")
     search_query = Map.get(params, "q")
-    {:ok, search_results} = Dictionary.get_sign_by_keyword!(search_query)
 
     socket =
-      if Enum.count(search_results) > 0 do
-        socket
-        |> assign(:search_results, search_results)
-        |> assign(:search_query, search_query)
-      else
-        socket
-        |> assign(:search_results, [])
-        |> assign(:search_query, nil)
-      end
+      assign(
+        socket,
+        :search_results,
+        if is_nil(search_query) do
+          []
+        else
+          {:ok, search_results} = Dictionary.get_sign_by_keyword!(search_query)
+          search_results
+        end
+      )
 
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:sign, Dictionary.get_sign_by_id_gloss!(id_gloss))}
+     |> assign(:sign, Dictionary.get_sign_by_id_gloss!(id_gloss))
+     |> assign(:search_query, search_query)}
   end
 
   # TODO: fix the page title
