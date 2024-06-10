@@ -10,6 +10,8 @@ defmodule Signbank.Dictionary.SignRegion do
 
     field :region, Ecto.Enum,
       values: [
+        :no_region,
+        :australia_wide,
         :northern,
         :queensland,
         :new_south_wales,

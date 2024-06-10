@@ -31,6 +31,7 @@ defmodule SignbankWeb.MapComponents do
       :tasmania -> "region_map_svg__select_tas"
       :victoria -> "region_map_svg__select_vic"
       :western_australia -> "region_map_svg__select_wa"
+      :no_region -> ""
     end)
   end
 
@@ -51,6 +52,7 @@ defmodule SignbankWeb.MapComponents do
 
   attr(:selected, :atom,
     values: [
+      :no_region,
       :australia_wide,
       :northern,
       :southern,

@@ -25,10 +25,16 @@
 <div class="entry-page__columns">
   <div class="entry-page__column">
     <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} />
-    <p><strong>Keywords:</strong> <%= Enum.join(@sign.translations || [], ", ") %></p>
+    <p><strong>Keywords:</strong> <%= Enum.join(@sign.keywords || [], ", ") %></p>
   </div>
   <div class="entry-page__column">
+    <%!-- TODO: inherit definitions (but not notes) from the citation form --%>
     <.definitions type={:basic} definitions={@sign.definitions} />
+    <.definitions
+      :if={@sign.citation}
+      type={:basic}
+      definitions={Map.get(@sign.citation, :definitions, [])}
+    />
   </div>
 </div>
 

@@ -13,50 +13,7 @@
   </head>
   <body>
     <div id="page-container">
-      <div id="content-wrap">
-        <header class="navbar">
-          <nav>
-            <div class="flex items-center gap-4">
-              <%!-- home about auslan research vocabulary grammar --%>
-              <%!-- TODO: logo styling/layout --%>
-              <a href="/">
-                <img src={~p"/images/logo.svg"} />
-              </a>
-            </div>
-            <ul>
-              <li><.link href={~p"/"}><%= SignbankWeb.Gettext.gettext("Home") %></.link></li>
-              <li>
-                <.link href={~p"/about"}>
-                  <%= SignbankWeb.Gettext.gettext("About Auslan") %>
-                </.link>
-              </li>
-              <li>
-                <.link href={~p"/research"}><%= SignbankWeb.Gettext.gettext("Research") %></.link>
-              </li>
-              <li>
-                <.link href={~p"/vocabulary"}>
-                  <%= SignbankWeb.Gettext.gettext("Vocabulary") %>
-                </.link>
-              </li>
-              <li>
-                <.link href={~p"/about/grammar"}>
-                  <%= SignbankWeb.Gettext.gettext("Grammar") %>
-                </.link>
-              </li>
-              <li>
-                <%!-- phx-change="validate" --%>
-                <form action="/dictionary" method="GET">
-                  <input type="text" name="q" placeholder="Search..." />
-                  <button type="submit">
-                    <Heroicons.magnifying_glass class="icon--small" />
-                  </button>
-                </form>
-              </li>
-            </ul>
-          </nav>
-        </header>
-        <%= @inner_content %>
-      </div>
+      <%= @inner_content %>
       <footer>
         This Signbank is licensed under <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons BY-NC-ND 4.0</a>.
         <p class="app_version">

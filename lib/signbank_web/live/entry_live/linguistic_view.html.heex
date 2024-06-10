@@ -1,6 +1,5 @@
 <%!-- TODO: this was from `gen.live`, look over it again --%>
 <%!-- TODO: fix this markup, they were `.header` but that isn't useful anymore --%>
-
 <nav class="entry-page__switch-entry">
   This page contains technical linguistic information about the sign.
   <%!--
@@ -9,7 +8,7 @@
     URL
    --%>
   <%= if @sign.type == :variant do %>
-    <.link patch={~p"/dictionary/sign/#{@sign.headsign.id_gloss}"} phx-click={JS.push_focus()}>
+    <.link patch={~p"/dictionary/sign/#{@sign.citation.id_gloss}"} phx-click={JS.push_focus()}>
       Go to the regular dictionary view.
     </.link>
   <% else %>
@@ -18,30 +17,32 @@
     </.link>
   <% end %>
 </nav>
-<div class="entry-page__columns">
+
+<div class="entry-page__columns entry-page__ling">
   <div class="entry-page__column">
     <%!-- TODO: add video --%>
     <%!-- TODO: add variants (somehow) --%>
     <%!-- TODO: make video bigger --%>
-    <%!-- TODO: add translations (under video or something) --%>
+    <%!-- TODO: add keywords (under video or something) --%>
     <%!-- TODO: make svelte component that covers the whole sign page --%>
 
+    <%!-- TODO: redo video to use wrapper like the basic entry view --%>
     <div class={["video-frame", video_frame_class(@sign)]}>
-      <p class="video-frame__sign-type"><%= @sign.type %></p>
+      <p class="video-frame__sign-type"><%= video_frame_type(@sign) %></p>
       <%!-- TODO: refactor to support variant videos (we want to include the thing with the multiple videos, this may require svelte) --%>
       <video controls muted autoplay width="600">
         <%!-- TODO: move this to an envvar --%>
         <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{Enum.at(@sign.videos,0).url}"} />
       </video>
     </div>
-    <p><strong>Keywords:</strong> <%= Enum.join(@sign.translations || [], ", ") %></p>
+    <p><strong>Keywords:</strong> <%= Enum.join(@sign.keywords || [], ", ") %></p>
   </div>
   <div class="entry-page__column">
     <table class="summary-table">
       <%= for field <- [
     :id_gloss,
-    :annotation_id_gloss,
-    :translations,
+    :id_gloss_annotation,
+    :keywords,
     :published
 ] do %>
         <tr>
@@ -63,65 +64,44 @@
     <%!-- TODO: gettext everything here --%>
     <details class="ling-details-section">
       <summary>
-        <h2>Usage</h2>
+        <h2 aria-label="Vocabulary:">Vocabulary</h2>
+        Usage - meaning - dialect
       </summary>
 
       <div class="ling-details-section__body">
-        <%!-- "lexis" from filemaker --%>
         <%!-- TODO: tags? --%>
-        <%!-- This box should contain dialects, religion, schools, borrowing (bsl/asl fields) and SE. Fine to have checkboxes (at least for the edit UI) --%>
-
-        <div>
-          <%!--
-      This section doesn't have a heading because the FileMaker database had it
-      labelled 'lexicality'. I don't think that label will help laypeople or linguists
-     --%>
-          <ul class="ling-details-section__properties">
-            <li>
-              General sign: <%= if Enum.any?(@sign.definitions, &(&1.role == :general)),
-                do: "yes",
-                else: "no" %>
-            </li>
-            <%!-- TODO: auslan lexeme, how to determine this? --%>
-            <li>Proposed sign: <%= if @sign.proposed_new_sign, do: "yes", else: "no" %></li>
-            <li>Doubtful: <%= if @sign.lexis_doubtful, do: "yes", else: "no" %></li>
-            <li>Variant sign: <%= if @sign.type == :variant, do: "yes", else: "no" %></li>
-            <li>Proper name: <%= if @sign.lexis_proper_name, do: "yes", else: "no" %></li>
-            <li>Restricted usage: <%= if @sign.lexis_restricted, do: "yes", else: "no" %></li>
-            <li>Marginal usage: <%= if @sign.lexis_marginal, do: "yes", else: "no" %></li>
-            <li>Obselete: <%= if @sign.lexis_obsolete, do: "yes", else: "no" %></li>
-            <li>Technical: <%= if @sign.lexis_technical, do: "yes", else: "no" %></li>
-          </ul>
-        </div>
-
         <div>
           <h3>Dialects</h3>
-          <.australia_map selected={@sign.regions} />
+          <%= if Enum.any?(@sign.regions) do %>
+            <.australia_map selected={@sign.regions} />
+          <% else %>
+            Unknown
+          <% end %>
         </div>
-
         <div>
-          <h3>Religion</h3>
+          <h3>Usage by other factors</h3>
           <ul class="ling-details-section__properties">
-            <li>Catholic: <%= if @sign.religion_catholic, do: "yes", else: "no" %></li>
             <li>
-              Catholic school: <%= if @sign.religion_catholic_school, do: "yes", else: "no" %>
+              Technical or specialist jargon: <%= bool_to_word(
+                @sign.lexis_technical_or_specialist_jargon
+              ) %>
             </li>
+            <li>Marginal/minority: <%= bool_to_word(@sign.lexis_marginal_or_minority) %></li>
+            <li>Obselete: <%= bool_to_word(@sign.lexis_obsolete) %></li>
+            <li>Anglican/state school: <%= bool_to_word(@sign.school_anglican_or_state) %></li>
             <li>
-              Jehovah's Witness: <%= if @sign.religion_jehovahs_witness, do: "yes", else: "no" %>
+              Catholic school: <%= bool_to_word(@sign.school_catholic) %>
             </li>
-            <li>
-              Other religion: <%= if @sign.religion_other_religion, do: "yes", else: "no" %>
-            </li>
-            <li>Anglican: <%= if @sign.religion_anglican, do: "yes", else: "no" %></li>
+            <li>Crude?: <%= bool_to_word(@sign.crude) %></li>
           </ul>
         </div>
         <div>
           <h3>Borrowings</h3>
           <ul class="ling-details-section__properties">
             <li>ASL gloss: <%= if @sign.asl_gloss, do: @sign.asl_gloss, else: "N/A" %></li>
-            <li>ASL loan?: <%= if @sign.is_asl_loan, do: "yes", else: "no" %></li>
+            <li>ASL loan?: <%= bool_to_word(@sign.is_asl_loan) %></li>
             <li>BSL gloss: <%= if @sign.bsl_gloss, do: @sign.bsl_gloss, else: "N/A" %></li>
-            <li>BSL loan?: <%= if @sign.is_bsl_loan, do: "yes", else: "no" %></li>
+            <li>BSL loan?: <%= bool_to_word(@sign.is_bsl_loan) %></li>
             <li>
               Signed English gloss: <%= if @sign.signed_english_gloss,
                 do: @sign.signed_english_gloss,
@@ -129,17 +109,16 @@
             </li>
             <li :if={@sign.signed_english_gloss}>
               <%!-- I have elected to show this only if there is an SE gloss, I believe it is confusing otherwise --%>
-              Signed English Only?: <%= if @sign.signed_english_only, do: "yes", else: "no" %>
+              Signed English Only?: <%= bool_to_word(@sign.is_signed_english_only) %>
             </li>
           </ul>
         </div>
         <div>
           <h3>Other</h3>
           <ul class="ling-details-section__properties">
-            <li>Iconicity: <%= @sign.iconicity %></li>
-            <%!-- as yet unimplemented:
-          <li>Crude?: </li>
-        --%>
+            <li aria-details="something">Iconicity: <%= @sign.iconicity %></li>
+            <li>Popular explanation: <%= @sign.popular_explanation %></li>
+
             <%!-- as yet unimplemented:
           <li>Corpus attested: </li>
         --%>
@@ -150,7 +129,8 @@
 
     <details class="ling-details-section">
       <summary>
-        <h2>Morphology</h2>
+        <h2 aria-label="Morphology:">Morphology</h2>
+        Spatial - lexical
       </summary>
       <div class="ling-details-section__body">
         <ul class="ling-details-section__properties">
@@ -179,39 +159,38 @@
             This sign <%= if @sign.morphology.multi_sign_expression, do: "is", else: "is not" %> a multi-sign expression.
           </li>
 
-          <li>
-            Morph HamNoSys: <%= if @sign.morphology.hamnosys,
-              do: "‘#{@sign.morphology.hamnosys}’",
-              else: "N/A" %>
+          <li :if={@sign.phonology.hamnosys_variant_analysis}>
+            HamNoSys variant analysis:
+            <span class="hamnosys"><%= @sign.phonology.hamnosys_variant_analysis %></span>
           </li>
         </ul>
         <div>
           <h3>Spatial</h3>
           <ul class="ling-details-section__properties">
-            <li>Directional: <%= if @sign.morphology.directional, do: "yes", else: "no" %></li>
+            <li>Directional: <%= bool_to_word(@sign.morphology.directional) %></li>
             <li>
-              Begins directional: <%= if @sign.morphology.begin_directional, do: "yes", else: "no" %>
+              Begins directional: <%= bool_to_word(@sign.morphology.beginning_directional) %>
             </li>
             <li>
-              Ends directional: <%= if @sign.morphology.end_directional, do: "yes", else: "no" %>
+              Ends directional: <%= bool_to_word(@sign.morphology.end_directional) %>
             </li>
-            <li>Orientating: <%= if @sign.morphology.orientating, do: "yes", else: "no" %></li>
+            <li>Orientating: <%= bool_to_word(@sign.morphology.orientating) %></li>
             <li>
-              Locating and directional: <%= if @sign.morphology.locating_and_directional,
-                do: "yes",
-                else: "no" %>
+              Locating and directional: <%= bool_to_word(
+                @sign.morphology.locating_and_directional
+              ) %>
             </li>
             <li>
-              Body locating: <%= if @sign.morphology.body_locating, do: "yes", else: "no" %>
+              Body locating: <%= bool_to_word(@sign.morphology.body_locating) %>
             </li>
           </ul>
         </div>
         <div>
           <h3>Lexical</h3>
           <ul class="ling-details-section__properties">
-            <li>Initialism: <%= if @sign.morphology.initialism, do: "yes", else: "no" %></li>
-            <li>Alphabet: <%= if @sign.morphology.alphabet, do: "yes", else: "no" %></li>
-            <li>Abbreviation: <%= if @sign.morphology.abbreviation, do: "yes", else: "no" %></li>
+            <li>Initialism: <%= bool_to_word(@sign.morphology.is_initialism) %></li>
+            <li>Alphabet: <%= bool_to_word(@sign.morphology.is_alphabet) %></li>
+            <li>Abbreviation: <%= bool_to_word(@sign.morphology.is_abbreviation) %></li>
           </ul>
         </div>
       </div>
@@ -219,7 +198,8 @@
 
     <details class="ling-details-section">
       <summary>
-        <h2>Phonology</h2>
+        <h2 aria-label="Phonology:">Phonology</h2>
+        movement - orientation - location
       </summary>
       <div class="ling-details-section__body">
         <ul class="ling-details-section__properties">
@@ -242,7 +222,10 @@
             ) %>
           </li>
           <li>
-            Location side: <%= @sign.phonology.loc_rightside_or_leftside %>
+            Location side: <%= @sign.phonology.location_rightside_or_leftside %>
+          </li>
+          <li :if={@sign.phonology.hamnosys}>
+            HamNoSys: <span class="hamnosys"><%= @sign.phonology.hamnosys %></span>
           </li>
         </ul>
         <div>
@@ -324,14 +307,14 @@
         <div>
           <h3>Large movements <small>(interactions of hands) — Two-handed signs only</small></h3>
           <%= for {label, value} <- %{
-        gettext("dominant hand only") => @sign.phonology.movement_dominant_only,
-        gettext("symmetrical") => @sign.phonology.movement_symmetrical,
-        gettext("parallel") => @sign.phonology.movement_parallel,
-        gettext("alternating") => @sign.phonology.movement_alternating,
-        gettext("away") => @sign.phonology.movement_away, # TODO: rename "away" to "separating"
-        gettext("towards") => @sign.phonology.movement_towards, # TODO: rename "towards" to "approaching"
-        gettext("cross") => @sign.phonology.movement_cross,
-      } do %>
+            gettext("dominant hand only") => @sign.phonology.movement_dominant_hand_only,
+            gettext("symmetrical") => @sign.phonology.movement_symmetrical,
+            gettext("parallel") => @sign.phonology.movement_parallel,
+            gettext("alternating") => @sign.phonology.movement_alternating,
+            gettext("away") => @sign.phonology.movement_separating,
+            gettext("towards") => @sign.phonology.movement_approaching,
+            gettext("cross") => @sign.phonology.movement_cross,
+          } do %>
             <div>
               <input disabled type="checkbox" id={label} name={label} value={value} />
               <label for={label}><%= label %></label>
@@ -361,9 +344,9 @@
 
     <.definitions type={:linguistic} definitions={@sign.definitions} />
 
-    <p :if={@sign.type == :headsign}>
+    <p :if={@sign.type == :citation}>
       <h4>Variants</h4>
-      <%!-- TODO: display videos/etc --%>
+      <%!-- TODO: show numbered links/buttons --%>
       <%= for variant <- @sign.variants do %>
         <div title="variant" style="margin-bottom: 3rem">
           <.link href={~p"/dictionary/sign/#{variant.id_gloss}/linguistic"}>
@@ -374,11 +357,11 @@
     </p>
 
     <p :if={@sign.type == :variant}>
-      <h4>Headsign</h4>
+      <h4>Citation form</h4>
       <%!-- TODO: display videos/etc --%>
       <div title="variant" style="margin-bottom: 3rem">
-        <.link href={~p"/dictionary/sign/#{@sign.headsign.id_gloss}/linguistic"}>
-          <%= @sign.headsign.id_gloss %>
+        <.link href={~p"/dictionary/sign/#{@sign.citation.id_gloss}/linguistic"}>
+          <%= @sign.citation.id_gloss %>
         </.link>
       </div>
     </p>

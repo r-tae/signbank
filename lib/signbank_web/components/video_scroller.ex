@@ -58,10 +58,10 @@ defmodule VideoScroller do
   end
 
   defp video_frame_class(sign) do
-    if String.starts_with?(sign.id_gloss, "FS") do
-      "fingerspelled"
+    if sign.english_entry do
+      "english_entry"
     else
-      if sign.signed_english_only do
+      if sign.is_signed_english_only do
         "se_only"
       else
         Atom.to_string(sign.type)
@@ -79,9 +79,9 @@ defmodule VideoScroller do
         </video>
         <div class="video-frame__sign-type">
           <%= cond do
-            String.starts_with?(@sign.id_gloss, "FS") -> "fingerspelled"
-            @sign.signed_english_only -> "se_only"
-            @sign.type == :headsign -> "stem"
+            @sign.english_entry -> "fingerspelled"
+            @sign.is_signed_english_only -> "se_only"
+            @sign.type == :citation -> "citation"
             @sign.type == :variant -> "variant"
           end %>
         </div>

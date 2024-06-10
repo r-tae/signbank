@@ -36,10 +36,10 @@ defmodule SignbankWeb.SignLive.LinguisticView do
   defp generate_initial_final_text(initial, final), do: "#{initial} → #{final}"
 
   defp video_frame_class(sign) do
-    if String.starts_with?(sign.id_gloss, "FS") do
+    if sign.english_entry do
       "fingerspelled"
     else
-      if sign.signed_english_only do
+      if sign.is_signed_english_only do
         "se_only"
       else
         Atom.to_string(sign.type)
@@ -47,17 +47,17 @@ defmodule SignbankWeb.SignLive.LinguisticView do
     end
   end
 
-  # defp video_frame_type(sign) do
-  #   type = video_frame_class(sign)
+  defp video_frame_type(sign) do
+    type = video_frame_class(sign)
 
-  #   if type == "se_only" do
-  #     "Signed English only"
-  #   else
-  #     type
-  #   end
-  # end
+    if type == "se_only" do
+      "Signed English only"
+    else
+      type
+    end
+  end
 
-  # defp bool_to_word(true), do: SignbankWeb.Gettext.gettext("yes")
-  # defp bool_to_word(false), do: SignbankWeb.Gettext.gettext("no")
-  # defp bool_to_word(_), do: SignbankWeb.Gettext.gettext("unknown")
+  defp bool_to_word(true), do: SignbankWeb.Gettext.gettext("yes")
+  defp bool_to_word(false), do: SignbankWeb.Gettext.gettext("no")
+  defp bool_to_word(_), do: SignbankWeb.Gettext.gettext("unknown")
 end

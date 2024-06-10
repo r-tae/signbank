@@ -681,8 +681,7 @@ defmodule SignbankWeb.CoreComponents do
     :question,
     :interact,
     :note,
-    :privatenote,
-    :popular_explanation
+    :editor_note
   ]
 
   @basic_definitions [
@@ -718,17 +717,13 @@ defmodule SignbankWeb.CoreComponents do
   defp definition_role_to_string(:noun), do: SignbankWeb.Gettext.gettext("As a Noun")
   defp definition_role_to_string(:verb), do: SignbankWeb.Gettext.gettext("As a Verb or Adjective")
   defp definition_role_to_string(:modifier), do: SignbankWeb.Gettext.gettext("As Modifier")
-  # ???
   defp definition_role_to_string(:augment), do: SignbankWeb.Gettext.gettext("Augment")
   defp definition_role_to_string(:deictic), do: SignbankWeb.Gettext.gettext("As a Pointing Sign")
   defp definition_role_to_string(:question), do: SignbankWeb.Gettext.gettext("As a question")
-  defp definition_role_to_string(:interact), do: SignbankWeb.Gettext.gettext("Interactive")
+  defp definition_role_to_string(:interactive), do: SignbankWeb.Gettext.gettext("Interactive")
 
   defp definition_role_to_string(:note), do: SignbankWeb.Gettext.gettext("Note")
-  defp definition_role_to_string(:privatenote), do: SignbankWeb.Gettext.gettext("Private note")
-
-  defp definition_role_to_string(:popular_explanation),
-    do: SignbankWeb.Gettext.gettext("Popular explanation")
+  defp definition_role_to_string(:editor_note), do: SignbankWeb.Gettext.gettext("Editor note")
 
   attr :type, :atom, values: [:basic, :linguistic], required: true
   attr :definitions, :list, required: true

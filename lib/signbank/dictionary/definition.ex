@@ -21,11 +21,11 @@ defmodule Signbank.Dictionary.Definition do
         :augment,
         :deictic,
         :question,
-        :interact,
+        :interactive,
         :popular_explanation,
         :note,
         # TODO: move to text field
-        :privatenote
+        :editor_note
       ]
 
     # TODO: figure out a way to handle SL definitions, probably can just set :language appropriately and have url field

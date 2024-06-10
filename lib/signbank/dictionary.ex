@@ -12,6 +12,7 @@ defmodule Signbank.Dictionary do
   @northern_states [:queensland, :western_australia]
   @default_order [
     :australia_wide,
+    :no_region,
     :southern,
     :northern,
     :victoria,
@@ -22,6 +23,7 @@ defmodule Signbank.Dictionary do
   ]
   @southern_order [
                     :australia_wide,
+                    :no_region,
                     :southern,
                     :northern
                   ] ++
@@ -29,6 +31,7 @@ defmodule Signbank.Dictionary do
                     @northern_states
   @northern_order [
                     :australia_wide,
+                    :no_region,
                     :northern,
                     :southern
                   ] ++
@@ -84,7 +87,7 @@ defmodule Signbank.Dictionary do
       Repo.get_by!(
         from(s in Sign,
           preload: [
-            headsign: [],
+            citation: [definitions: []],
             definitions: [],
             variants: [videos: [], regions: []],
             regions: [],
@@ -96,7 +99,7 @@ defmodule Signbank.Dictionary do
       )
 
   @doc """
-  Returns a sign with the given `id_gloss`. It only returns headsigns.
+  Returns a sign with the given `id_gloss`. It only returns citation entries.
 
   ## Examples
 
@@ -118,7 +121,7 @@ defmodule Signbank.Dictionary do
     case Repo.all(
            from(s in Sign,
              preload: [
-               headsign: [],
+               citation: [definitions: []],
                definitions: [],
                variants: [videos: [], regions: []],
                regions: [],
@@ -126,8 +129,8 @@ defmodule Signbank.Dictionary do
                active_video: []
              ],
              where:
-               fragment("?=any(lower(translations ::text)::text[])", ^keyword) and
-                 s.type == :headsign
+               fragment("?=any(lower(keywords ::text)::text[])", ^keyword) and
+                 s.type == :citation
            )
          ) do
       [] -> {:err, "No signs with keyword #{keyword} found."}
@@ -161,7 +164,7 @@ defmodule Signbank.Dictionary do
             else similarity(kw,$1)
           end similarity
         from
-        (select id, unnest(translations) as kw, id_gloss, "type" from signs where "type" = 'headsign') s2
+        (select id, unnest(keywords) as kw, id_gloss, "type" from signs where "type" = 'citation') s2
         where similarity(kw,$1) > 0.4 or
           starts_with(kw,$1);
         """,

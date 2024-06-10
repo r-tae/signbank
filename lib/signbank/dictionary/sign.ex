@@ -7,20 +7,19 @@ defmodule Signbank.Dictionary.Sign do
   alias Signbank.Dictionary
 
   schema "signs" do
-    field :type, Ecto.Enum, values: [:headsign, :variant]
+    field :type, Ecto.Enum, values: [:citation, :variant]
     field :id_gloss, :string
-    field :annotation_id_gloss, :string
+    field :id_gloss_annotation, :string
+    field :id_gloss_variant_analysis, :string
 
-    # TODO: uncomment this after adding %Region{}/SignRegion
-    # many_to_many :regions, Dictionary.Region, join_through: Dictionary.SignRegion
+    field :sense_number, :integer
 
-    field :translations, {:array, :string}
+    field :keywords, {:array, :string}
     field :legacy_id, :integer
+    field :legacy_sign_number, :integer
+    field :legacy_stem_sign_number, :integer
     field :published, :boolean, default: false
     field :proposed_new_sign, :boolean, default: false
-
-    field :compound, :string
-    field :hamnosys, :string
 
     # TODO: uncomment this after adding %Tag{}/SignTag
     # many_to_many :tags, Dictionary.Tag, join_through: Dictionary.SignTag
@@ -33,20 +32,16 @@ defmodule Signbank.Dictionary.Sign do
       foreign_key: :active_video_id,
       references: :id
 
-    # TODO: uncomment this after adding %SignVideo{}
     has_many :videos, Dictionary.SignVideo
     has_many :regions, Dictionary.SignRegion
 
-    field :has_video?, :string, virtual: true
-    field :has_definitions?, :string, virtual: true
-
-    # If type == :headsign
+    # If type == :citation
     has_many :variants, Dictionary.Sign,
       foreign_key: :variant_of_id,
       references: :id
 
     # If type == :variant
-    belongs_to :headsign, Dictionary.Sign,
+    belongs_to :citation, Dictionary.Sign,
       foreign_key: :variant_of_id,
       references: :id
 
@@ -63,24 +58,27 @@ defmodule Signbank.Dictionary.Sign do
     field :asl_gloss, :string
     field :bsl_gloss, :string
     field :iconicity, Ecto.Enum, values: [:opaque, :obscure, :translucent, :transparent]
+    field :popular_explanation, :string
     field :is_asl_loan, :boolean
     field :is_bsl_loan, :boolean
-    field :legacy_sign_number, :integer
     field :signed_english_gloss, :string
-    field :signed_english_only, :boolean
+    field :is_signed_english_only, :boolean
+    field :is_signed_english_based_on_auslan, :boolean
 
-    field :lexis_doubtful, :boolean
-    field :lexis_proper_name, :boolean
-    field :lexis_restricted, :boolean
-    field :lexis_marginal, :boolean
+    field :english_entry, :boolean
+
+    field :editorial_doubtful_or_unsure, :boolean
+    field :editorial_problematic, :boolean
+    field :editorial_problematic_video, :boolean
+
+    field :lexis_marginal_or_minority, :boolean
     field :lexis_obsolete, :boolean
-    field :lexis_technical, :boolean
+    field :lexis_technical_or_specialist_jargon, :boolean
 
-    field :religion_catholic, :boolean
-    field :religion_catholic_school, :boolean
-    field :religion_jehovahs_witness, :boolean
-    field :religion_other_religion, :boolean
-    field :religion_anglican, :boolean
+    field :school_anglican_or_state, :boolean
+    field :school_catholic, :boolean
+
+    field :crude, :boolean
 
     timestamps()
   end
@@ -89,49 +87,49 @@ defmodule Signbank.Dictionary.Sign do
     required_fields = [
       :type,
       :id_gloss,
-      :annotation_id_gloss,
-      :translations,
-      :published
+      :id_gloss_annotation,
+      :keywords,
+      :published,
+      :proposed_new_sign,
+      :crude,
+      :english_entry
     ]
 
     optional_fields = [
+      :sense_number,
+      :id_gloss_variant_analysis,
       :legacy_id,
-      :proposed_new_sign,
-      :compound,
-      :hamnosys,
-      :variant_of_id,
-      :active_video_id,
-      :lexis_doubtful,
-      :lexis_proper_name,
-      :lexis_restricted,
-      :lexis_marginal,
+      :legacy_sign_number,
+      :legacy_stem_sign_number,
+      :asl_gloss,
+      :bsl_gloss,
+      :iconicity,
+      :popular_explanation,
+      :is_asl_loan,
+      :is_bsl_loan,
+      :signed_english_gloss,
+      :is_signed_english_only,
+      :is_signed_english_based_on_auslan,
+      :editorial_doubtful_or_unsure,
+      :editorial_problematic,
+      :lexis_marginal_or_minority,
       :lexis_obsolete,
-      :lexis_technical,
-      :religion_catholic,
-      :religion_catholic_school,
-      :religion_jehovahs_witness,
-      :religion_other_religion,
-      :religion_anglican
+      :lexis_technical_or_specialist_jargon,
+      :school_anglican_or_state,
+      :school_catholic
     ]
 
     sign
     |> cast(attrs, required_fields ++ optional_fields)
     |> cast_embed(:phonology)
     |> cast_embed(:morphology)
-    # |> then(fn changeset ->
-    # changeset |> get_field(:definitions) |> IO.inspect()
-    # changeset
-    # end)
     |> validate_sign_type()
     |> validate_required(required_fields)
-    # TODO: uncomment this
-    # |> foreign_key_constraint(:variants, name: :signs_variant_of_fkey)
+    |> foreign_key_constraint(:variants, name: :signs_variant_of_fkey)
     |> unique_constraint(:id_gloss)
-    |> assoc_constraint(:headsign)
+    |> assoc_constraint(:citation)
     # |> assoc_constraint(:active_video_id)
     |> cast_assoc(:videos)
-
-    # TODO: uncomment this
   end
 
   defp validate_sign_type(changeset) do
@@ -145,7 +143,7 @@ defmodule Signbank.Dictionary.Sign do
       # TODO: uncomment this
       # |> guard_field_not_exists(:definitions, "variant cannot have definitions")
 
-      :headsign ->
+      :citation ->
         changeset
         |> guard_field_not_exists(:variant_of_id, "cannot be set when type is not variant")
 

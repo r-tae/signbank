@@ -7,22 +7,24 @@ defmodule Signbank.Dictionary.Morphology do
 
   embedded_schema do
     field :directional, :boolean
-    field :begin_directional, :boolean
+    field :beginning_directional, :boolean
     field :end_directional, :boolean
     field :orientating, :boolean
     field :locating_and_directional, :boolean
     field :body_locating, :boolean
-    field :hamnosys, :string
 
-    field :initialism, :boolean
-    field :alphabet, :boolean
-    field :abbreviation, :boolean
+    field :is_initialism, :boolean
+    field :is_alphabet, :boolean
+    field :is_abbreviation, :boolean
+
+    field :is_fingerspelled_word, :boolean
 
     # TODO: eventually we would like to refactor this information into a table, to properly link signs
     field :blend_of, :string
     field :calque_of, :string
     field :compound_of, :string
     field :idiom_of, :string
+    field :initialization_of, :string
     field :multi_sign_expression, :string
   end
 
@@ -30,19 +32,19 @@ defmodule Signbank.Dictionary.Morphology do
     phonology
     |> cast(attrs, [
       :directional,
-      :begin_directional,
+      :beginning_directional,
       :end_directional,
       :orientating,
-      :locating_and_directional,
       :body_locating,
-      :hamnosys,
       :blend_of,
       :calque_of,
       :compound_of,
-      :initialism,
-      :alphabet,
-      :abbreviation,
+      :is_initialism,
+      :is_alphabet,
+      :is_abbreviation,
+      :is_fingerspelled_word,
       :idiom_of,
+      :initialization_of,
       :multi_sign_expression
     ])
   end

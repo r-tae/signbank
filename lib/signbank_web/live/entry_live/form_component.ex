@@ -21,12 +21,12 @@ defmodule SignbankWeb.SignLive.FormComponent do
         <label for={@uploads.video.ref}>Add new video</label>
         <.live_file_input upload={@uploads.video} />
         <.input field={@form[:id_gloss]} label={gettext("ID gloss")} />
-        <.input field={@form[:annotation_id_gloss]} label={gettext("Annotation ID gloss")} />
+        <.input field={@form[:id_gloss_annotation]} label={gettext("Annotation ID gloss")} />
         <.input
-          field={@form[:translations]}
-          label={gettext("Translations")}
+          field={@form[:keywords]}
+          label={gettext("Keywords")}
           value={
-            @form[:translations].value
+            @form[:keywords].value
             |> List.wrap()
             |> Enum.join(", ")
           }
@@ -64,7 +64,7 @@ defmodule SignbankWeb.SignLive.FormComponent do
   def handle_event("validate", %{"sign" => sign_params}, socket) do
     changeset =
       socket.assigns.sign
-      |> Dictionary.change_sign(cast_translations(sign_params))
+      |> Dictionary.change_sign(cast_keywords(sign_params))
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
@@ -73,23 +73,23 @@ defmodule SignbankWeb.SignLive.FormComponent do
   def handle_event("save", %{"sign" => sign_params}, socket) do
     sign_params =
       sign_params
-      |> cast_translations()
+      |> cast_keywords()
       |> with_video_url(socket)
 
     save_sign(socket, socket.assigns.action, sign_params)
   end
 
-  defp cast_translations(%{"translations" => translations} = params) do
+  defp cast_keywords(%{"keywords" => keywords} = params) do
     Map.put(
       params,
-      "translations",
-      translations
+      "keywords",
+      keywords
       |> String.split(",")
       |> Enum.map(&String.trim(&1))
     )
   end
 
-  defp cast_translations(params), do: params
+  defp cast_keywords(params), do: params
 
   defp with_video_url(sign_params, socket) do
     uploaded_files =

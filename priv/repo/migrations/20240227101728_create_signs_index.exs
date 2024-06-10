@@ -5,7 +5,7 @@ defmodule Signbank.Repo.Migrations.CreateSignsIndex do
   @disable_migration_lock true
 
   def change do
-    # TODO: create constraint that prevents headsigns from having `variant_of_id_gloss`
+    # TODO: create constraint that prevents citation entries from having `variant_of_id_gloss`
     # TODO: and preferably vice versa
 
     create unique_index(:signs, [:id_gloss], concurrently: true)

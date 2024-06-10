@@ -15,7 +15,7 @@
   row_click={fn {_id, sign} -> JS.navigate(~p"/dictionary/sign/#{sign.id_gloss}") end}
 >
   <:col :let={{_id, sign}} label="id_gloss"><%= sign.id_gloss %></:col>
-  <:col :let={{_id, sign}} label="annotation_id_gloss"><%= sign.annotation_id_gloss %></:col>
+  <:col :let={{_id, sign}} label="id_gloss_annotation"><%= sign.id_gloss_annotation %></:col>
   <:action :let={{_id, sign}}>
     <div class="sr-only">
       <.link navigate={~p"/dictionary/sign/#{sign.id_gloss}"}>Show</.link>
