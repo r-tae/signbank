@@ -1,21 +1,24 @@
 <%!-- TODO: this was from `gen.live`, look over it again --%>
 <%!-- TODO: fix this markup, they were `.header` but that isn't useful anymore --%>
-<nav class="entry-page__switch-entry">
-  This page contains technical linguistic information about the sign.
-  <%!--
-    We want to avoid sending people to the basic view of a variant entry, really we
-    should just redirect if anyone lands there because they may manually change the
-    URL
-   --%>
-  <%= if @sign.type == :variant do %>
-    <.link patch={~p"/dictionary/sign/#{@sign.citation.id_gloss}"} phx-click={JS.push_focus()}>
-      Go to the regular dictionary view.
-    </.link>
-  <% else %>
-    <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}"} phx-click={JS.push_focus()}>
-      Go to the regular dictionary view.
-    </.link>
-  <% end %>
+<nav class="entry-page__switch-entry" style="display: flex; justify-content: space-between;">
+  <.dictionary_paging_nav next={@next} previous={@previous} />
+  <p>
+    This page contains technical linguistic information about the sign.
+    <%!--
+      We want to avoid sending people to the basic view of a variant entry, really we
+      should just redirect if anyone lands there because they may manually change the
+      URL
+    --%>
+    <%= if @sign.type == :variant do %>
+      <.link patch={~p"/dictionary/sign/#{@sign.citation.id_gloss}"} phx-click={JS.push_focus()}>
+        Go to the regular dictionary view.
+      </.link>
+    <% else %>
+      <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}"} phx-click={JS.push_focus()}>
+        Go to the regular dictionary view.
+      </.link>
+    <% end %>
+  </p>
 </nav>
 
 <div class="entry-page__columns entry-page__ling">
