@@ -126,6 +126,19 @@ footer {
   }
 }
 
+.entry-page__dict_page_nav {
+  .entry-page__dict_page_button {
+    padding: 0.5em 1em;
+    border: solid 1px black;
+    text-decoration: none;
+    color: black;
+    border-collapse: collapse;
+    &[disabled] {
+      color: gray;
+      pointer-events: none;
+    }
+  }
+}
 
 .entry-page__search_result {
   padding: 0.5em 1em;

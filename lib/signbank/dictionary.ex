@@ -203,6 +203,21 @@ defmodule Signbank.Dictionary do
   end
 
   @doc """
+  Finds next and previous Signs in predefined sorting order.
+  """
+  def get_prev_next_signs(%Sign{id: id}) do
+    Repo.one!(
+      from so in "sign_order",
+        left_join: p in Sign,
+        on: [id: so.previous],
+        left_join: n in Sign,
+        on: [id: so.next],
+        where: so.sign_id == ^id,
+        select: %{previous: p, next: n}
+    )
+  end
+
+  @doc """
   Creates a sign.
 
   ## Examples

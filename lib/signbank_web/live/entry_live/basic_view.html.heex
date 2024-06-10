@@ -1,6 +1,7 @@
 <%!-- TODO: this was from `gen.live`, look over it again --%>
 <%!-- TODO: fix this markup, they were `.header` but that isn't useful anymore --%>
 <nav class="entry-page__switch-entry" style="display: flex; justify-content: space-between;">
+  <.dictionary_paging_nav next={@next} previous={@previous} />
   <p>
     To see more technical information
     <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}/linguistic"} phx-click={JS.push_focus()}>
