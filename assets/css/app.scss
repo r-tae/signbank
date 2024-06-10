@@ -57,19 +57,40 @@ footer {
   background-color: $background-color;
   color: $text-color;
 
+  // TODO: switch to hamburger at width=840
   nav {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 2em;
+    align-items: end;
+    gap: 1rem;
+    padding: 2rem;
+    padding-top: 3rem;
+
+    .menu_and_search {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+      align-items: end;
+    }
+
+    #logo {
+      max-width: 35vw;
+      margin-bottom: max(-2%, -22px);
+
+      img {
+        max-width: inherit;
+      }
+    }
 
     ul {
-      // width: 100%;
+      margin: 0;
+      padding: 0;
       min-width: max-content;
       display: flex;
       gap: 1em;
       flex-direction: row;
-      align-items: center;
+      align-items: end;
       justify-content: space-between;
 
       font-size: 1.2em;
@@ -133,6 +154,7 @@ footer {
     text-decoration: none;
     color: black;
     border-collapse: collapse;
+
     &[disabled] {
       color: gray;
       pointer-events: none;
@@ -203,16 +225,30 @@ footer {
 
 
 .entry-page__videos_scroller {
-  position:relative;
+  position: relative;
 
-  #next_variant,
-  #previous_variant {
+  .entry-page__videos_scroller_slide_buttons {
     position: absolute;
     z-index: 50;
-    margin-top: 38%;
+    margin-top: 25%;
+    padding: 1.3rem 0.5rem;
+
+    display: flex;
+    align-items: center;
+    height: 2.5em;
+    border-radius: 0;
+    border: 1px solid black;
   }
-  #next_variant { right: 0; }
-  #previous_variant { left: 0; }
+
+  #next_variant {
+    right: 0;
+  }
+
+  #previous_variant {
+    left: 0;
+  }
+
+
 }
 
 .video-frame {

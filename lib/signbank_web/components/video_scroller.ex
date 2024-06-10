@@ -13,20 +13,24 @@ defmodule VideoScroller do
       <button
         :if={not Enum.empty?(@sign.variants)}
         id="previous_variant"
+        class="entry-page__videos_scroller_slide_buttons"
         href="#"
         phx-click="previous"
         phx-target={@myself}
         disabled={@counter == 0}
+        aria-label="previous variant"
       >
         <Heroicons.arrow_left class="icon--small" />
       </button>
       <button
         :if={not Enum.empty?(@sign.variants)}
         id="next_variant"
+        class="entry-page__videos_scroller_slide_buttons"
         href="#"
         phx-click="next"
         phx-target={@myself}
         disabled={@counter == Enum.count(@sign.variants)}
+        aria-label="next variant"
       >
         <Heroicons.arrow_right class="icon--small" />
       </button>

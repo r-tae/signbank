@@ -28,7 +28,7 @@
       <.link disabled={true} class="entry-page__dict_page_button">Next</.link>
     <% end %>
   </p>
-  
+
   <p>
     This page contains technical linguistic information about the sign.
     <%!--
@@ -369,20 +369,23 @@
 
     <.definitions type={:linguistic} definitions={@sign.definitions} />
 
-    <p :if={@sign.type == :citation and Enum.count(@sign.variants) > 0}  style="margin-bottom: 3rem">
+    <p
+      :if={@sign.type == :citation and Enum.count(@sign.variants) > 0}
+      style="margin-bottom: 3rem"
+    >
       <h4>Variants</h4>
       <ol class="entry-page__variant_list">
-      <%= for {variant, index} <- Enum.with_index(@sign.variants, 1) do %>
-        <li>
-          <.link href={~p"/dictionary/sign/#{variant.id_gloss}/linguistic"}>
-            [<%= index %>]
-          </.link>
-        </li>
-      <% end %>
+        <%= for {variant, index} <- Enum.with_index(@sign.variants, 1) do %>
+          <li>
+            <.link href={~p"/dictionary/sign/#{variant.id_gloss}/linguistic"}>
+              [<%= index %>]
+            </.link>
+          </li>
+        <% end %>
       </ol>
     </p>
 
-    <p :if={@sign.type == :variant}  style="margin-bottom: 3rem">
+    <p :if={@sign.type == :variant} style="margin-bottom: 3rem">
       <div>
         <.link href={~p"/dictionary/sign/#{@sign.citation.id_gloss}/linguistic"}>
           Citation form >
