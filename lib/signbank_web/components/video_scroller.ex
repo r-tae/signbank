@@ -10,19 +10,6 @@ defmodule VideoScroller do
     # should refactor to use query params to control which video is selected
     ~H"""
     <div class="entry-page__videos_scroller">
-      <style>
-        .entry-page__videos_scroller {
-          position:relative;
-        }
-        .entry-page__videos_scroller #next_variant,
-        .entry-page__videos_scroller #previous_variant {
-          position: absolute;
-          z-index: 50;
-          margin-top: 38%;
-        }
-        #next_variant { right: 0; }
-        #previous_variant { left: 0; }
-      </style>
       <button
         :if={not Enum.empty?(@sign.variants)}
         id="previous_variant"
@@ -70,6 +57,7 @@ defmodule VideoScroller do
   end
 
   defp video_frame(assigns) do
+    # TODO: refactor along with linguistic_view.html.heex
     ~H"""
     <div id={"video_#{@id}"} class={["video-frame", video_frame_class(@sign)]}>
       <%!-- TODO: refactor to support variant videos (we want to include the thing with the multiple videos, this may require svelte) --%>

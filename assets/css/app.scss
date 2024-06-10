@@ -172,6 +172,13 @@ footer {
     "tags defintitions";
 }
 
+.entry-page__variant_list {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  gap: 1em;
+}
+
 .entry-page__columns {
   display: flex;
   flex-direction: row;
@@ -192,6 +199,20 @@ footer {
       width: 100%;
     }
   }
+}
+
+
+.entry-page__videos_scroller {
+  position:relative;
+
+  #next_variant,
+  #previous_variant {
+    position: absolute;
+    z-index: 50;
+    margin-top: 38%;
+  }
+  #next_variant { right: 0; }
+  #previous_variant { left: 0; }
 }
 
 .video-frame {

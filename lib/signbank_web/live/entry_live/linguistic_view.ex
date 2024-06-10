@@ -65,35 +65,4 @@ defmodule SignbankWeb.SignLive.LinguisticView do
   defp bool_to_word(true), do: SignbankWeb.Gettext.gettext("yes")
   defp bool_to_word(false), do: SignbankWeb.Gettext.gettext("no")
   defp bool_to_word(_), do: SignbankWeb.Gettext.gettext("unknown")
-
-  defp dictionary_paging_nav(assigns) do
-    ~H"""
-    <p class="entry-page__dict_page_nav">
-      <%= if @previous != nil do %>
-        <.link
-          id={"search_result_#{@previous.id_gloss}"}
-          class="entry-page__dict_page_button"
-          patch={~p"/dictionary/sign/#{@previous.id_gloss}"}
-          phx-click={JS.push_focus()}
-        >
-          Previous
-        </.link>
-      <% else %>
-        <.link disabled={true} class="entry-page__dict_page_button">Previous</.link>
-      <% end %>
-      <%= if @next != nil do %>
-        <.link
-          id={"search_result_#{@next.id_gloss}"}
-          class="entry-page__dict_page_button"
-          patch={~p"/dictionary/sign/#{@next.id_gloss}"}
-          phx-click={JS.push_focus()}
-        >
-          Next
-        </.link>
-      <% else %>
-        <.link disabled={true} class="entry-page__dict_page_button">Next</.link>
-      <% end %>
-    </p>
-    """
-  end
 end

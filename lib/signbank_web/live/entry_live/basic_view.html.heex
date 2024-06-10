@@ -1,7 +1,34 @@
 <%!-- TODO: this was from `gen.live`, look over it again --%>
 <%!-- TODO: fix this markup, they were `.header` but that isn't useful anymore --%>
 <nav class="entry-page__switch-entry" style="display: flex; justify-content: space-between;">
-  <.dictionary_paging_nav next={@next} previous={@previous} />
+  <%!-- TODO: refactor these page entry nav buttons along with the same in linguistic_view.html.heex --%>
+  <p class="entry-page__dict_page_nav">
+    <%= if @previous != nil do %>
+      <.link
+        id={"search_result_#{@previous.id_gloss}"}
+        class="entry-page__dict_page_button"
+        patch={~p"/dictionary/sign/#{@previous.id_gloss}"}
+        phx-click={JS.push_focus()}
+      >
+        Previous
+      </.link>
+    <% else %>
+      <.link disabled={true} class="entry-page__dict_page_button">Previous</.link>
+    <% end %>
+    <%= if @next != nil do %>
+      <.link
+        id={"search_result_#{@next.id_gloss}"}
+        class="entry-page__dict_page_button"
+        patch={~p"/dictionary/sign/#{@next.id_gloss}"}
+        phx-click={JS.push_focus()}
+      >
+        Next
+      </.link>
+    <% else %>
+      <.link disabled={true} class="entry-page__dict_page_button">Next</.link>
+    <% end %>
+  </p>
+  
   <p>
     To see more technical information
     <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}/linguistic"} phx-click={JS.push_focus()}>
@@ -10,14 +37,14 @@
   </p>
   <%!-- <p :if={@search_query != nil and not Enum.empty?(@search_results)}> --%>
   <p>
-    <%= for {result, index} <- Enum.with_index(@search_results) do %>
+    <%= for {result, index} <- Enum.with_index(@search_results, 1) do %>
       <.link
         id={"search_result_#{result.id_gloss}"}
         class="entry-page__search_result"
         patch={~p"/dictionary/sign/#{result.id_gloss}?q=#{@search_query}"}
         phx-click={JS.push_focus()}
       >
-        <%= index + 1 %>
+        <%= index %>
       </.link>
     <% end %>
   </p>

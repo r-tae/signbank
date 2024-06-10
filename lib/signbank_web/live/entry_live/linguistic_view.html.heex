@@ -1,7 +1,34 @@
 <%!-- TODO: this was from `gen.live`, look over it again --%>
 <%!-- TODO: fix this markup, they were `.header` but that isn't useful anymore --%>
 <nav class="entry-page__switch-entry" style="display: flex; justify-content: space-between;">
-  <.dictionary_paging_nav next={@next} previous={@previous} />
+  <%!-- TODO: refactor these page entry nav buttons along with the same in basic_view.html.heex --%>
+  <p class="entry-page__dict_page_nav">
+    <%= if @previous != nil do %>
+      <.link
+        id={"search_result_#{@previous.id_gloss}"}
+        class="entry-page__dict_page_button"
+        patch={~p"/dictionary/sign/#{@previous.id_gloss}/linguistic"}
+        phx-click={JS.push_focus()}
+      >
+        Previous
+      </.link>
+    <% else %>
+      <.link disabled={true} class="entry-page__dict_page_button">Previous</.link>
+    <% end %>
+    <%= if @next != nil do %>
+      <.link
+        id={"search_result_#{@next.id_gloss}"}
+        class="entry-page__dict_page_button"
+        patch={~p"/dictionary/sign/#{@next.id_gloss}/linguistic"}
+        phx-click={JS.push_focus()}
+      >
+        Next
+      </.link>
+    <% else %>
+      <.link disabled={true} class="entry-page__dict_page_button">Next</.link>
+    <% end %>
+  </p>
+  
   <p>
     This page contains technical linguistic information about the sign.
     <%!--
@@ -23,20 +50,15 @@
 
 <div class="entry-page__columns entry-page__ling">
   <div class="entry-page__column">
-    <%!-- TODO: add video --%>
-    <%!-- TODO: add variants (somehow) --%>
-    <%!-- TODO: make video bigger --%>
-    <%!-- TODO: add keywords (under video or something) --%>
-    <%!-- TODO: make svelte component that covers the whole sign page --%>
-
-    <%!-- TODO: redo video to use wrapper like the basic entry view --%>
+    <%!-- TODO: refactor along with video_scroller.ex --%>
     <div class={["video-frame", video_frame_class(@sign)]}>
-      <p class="video-frame__sign-type"><%= video_frame_type(@sign) %></p>
-      <%!-- TODO: refactor to support variant videos (we want to include the thing with the multiple videos, this may require svelte) --%>
-      <video controls muted autoplay width="600">
-        <%!-- TODO: move this to an envvar --%>
-        <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{Enum.at(@sign.videos,0).url}"} />
-      </video>
+      <div class="video-frame__video_wrapper">
+        <video controls muted autoplay width="600">
+          <%!-- TODO: move this to an envvar --%>
+          <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{Enum.at(@sign.videos,0).url}"} />
+        </video>
+        <p class="video-frame__sign-type"><%= video_frame_type(@sign) %></p>
+      </div>
     </div>
     <p><strong>Keywords:</strong> <%= Enum.join(@sign.keywords || [], ", ") %></p>
   </div>
@@ -347,24 +369,23 @@
 
     <.definitions type={:linguistic} definitions={@sign.definitions} />
 
-    <p :if={@sign.type == :citation}>
+    <p :if={@sign.type == :citation and Enum.count(@sign.variants) > 0}  style="margin-bottom: 3rem">
       <h4>Variants</h4>
-      <%!-- TODO: show numbered links/buttons --%>
-      <%= for variant <- @sign.variants do %>
-        <div title="variant" style="margin-bottom: 3rem">
+      <ol class="entry-page__variant_list">
+      <%= for {variant, index} <- Enum.with_index(@sign.variants, 1) do %>
+        <li>
           <.link href={~p"/dictionary/sign/#{variant.id_gloss}/linguistic"}>
-            <%= variant.id_gloss %>
+            [<%= index %>]
           </.link>
-        </div>
+        </li>
       <% end %>
+      </ol>
     </p>
 
-    <p :if={@sign.type == :variant}>
-      <h4>Citation form</h4>
-      <%!-- TODO: display videos/etc --%>
-      <div title="variant" style="margin-bottom: 3rem">
+    <p :if={@sign.type == :variant}  style="margin-bottom: 3rem">
+      <div>
         <.link href={~p"/dictionary/sign/#{@sign.citation.id_gloss}/linguistic"}>
-          <%= @sign.citation.id_gloss %>
+          Citation form >
         </.link>
       </div>
     </p>
