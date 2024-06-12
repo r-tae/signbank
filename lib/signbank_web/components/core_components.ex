@@ -679,7 +679,7 @@ defmodule SignbankWeb.CoreComponents do
     :augment,
     :deictic,
     :question,
-    :interact,
+    :interactive,
     :note,
     :editor_note
   ]
@@ -693,7 +693,7 @@ defmodule SignbankWeb.CoreComponents do
     :augment,
     :deictic,
     :question,
-    :interact,
+    :interactive,
     :note
   ]
 
