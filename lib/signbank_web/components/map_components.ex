@@ -10,8 +10,8 @@ defmodule SignbankWeb.MapComponents do
     # HACK: this way of listing states cannot be reliably localised
     selected
     |> Enum.flat_map(fn
-      %{region: :southern} -> ["the southern states"]
-      %{region: :northern} -> ["the northen states"]
+      %{region: :southern_dialect} -> ["the southern states"]
+      %{region: :northern_dialect} -> ["the northen states"]
       %{region: region} -> [Atom.to_string(region)]
     end)
     |> Signbank.Cldr.List.to_string!(locale: Signbank.Cldr.get_locale().cldr_locale_name)
@@ -22,8 +22,8 @@ defmodule SignbankWeb.MapComponents do
     |> Enum.map(& &1.region)
     |> Enum.map_join(" ", fn
       :australia_wide -> "region_map_svg__select_aus"
-      :northern -> "region_map_svg__select_nth"
-      :southern -> "region_map_svg__select_sth"
+      :northern_dialect -> "region_map_svg__select_nth"
+      :southern_dialect -> "region_map_svg__select_sth"
       :new_south_wales -> "region_map_svg__select_nsw"
       :northern_territory -> "region_map_svg__select_nt"
       :queensland -> "region_map_svg__select_qld"
@@ -54,8 +54,8 @@ defmodule SignbankWeb.MapComponents do
     values: [
       :no_region,
       :australia_wide,
-      :northern,
-      :southern,
+      :northern_dialect,
+      :southern_dialect,
       :new_south_wales,
       :northern_territory,
       :queensland,
@@ -73,8 +73,8 @@ defmodule SignbankWeb.MapComponents do
     #   |> Enum.map(& &1.region)
     #   |> Enum.map_join(" ", fn
     #     :australia_wide -> "region_map_svg__select_aus"
-    #     :northern -> "region_map_svg__select_nth"
-    #     :southern -> "region_map_svg__select_sth"
+    #     :northern_dialect -> "region_map_svg__select_nth"
+    #     :southern_dialect -> "region_map_svg__select_sth"
     #     :new_south_wales -> "region_map_svg__select_nsw"
     #     :northern_territory -> "region_map_svg__select_nt"
     #     :queensland -> "region_map_svg__select_qld"

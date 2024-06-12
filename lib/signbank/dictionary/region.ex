@@ -12,10 +12,10 @@ defmodule Signbank.Dictionary.SignRegion do
       values: [
         :no_region,
         :australia_wide,
-        :northern,
+        :northern_dialect,
         :queensland,
         :new_south_wales,
-        :southern,
+        :southern_dialect,
         :victoria,
         :western_australia,
         :south_australia,

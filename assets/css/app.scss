@@ -148,6 +148,8 @@ footer {
 }
 
 .entry-page__dict_page_nav {
+  flex-shrink: 0;
+
   .entry-page__dict_page_button {
     padding: 0.5em 1em;
     border: solid 1px black;
@@ -170,9 +172,11 @@ footer {
   border-collapse: collapse;
 }
 
-.entry-page__switch-entry {
+.entry-page__switch_entry {
   margin-bottom: 1em;
-  font-size: 1.1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   p {
     margin: 0;

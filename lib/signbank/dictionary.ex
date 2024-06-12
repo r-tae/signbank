@@ -13,8 +13,8 @@ defmodule Signbank.Dictionary do
   @default_order [
     :australia_wide,
     :no_region,
-    :southern,
-    :northern,
+    :southern_dialect,
+    :northern_dialect,
     :victoria,
     :new_south_wales,
     :queensland,
@@ -24,22 +24,22 @@ defmodule Signbank.Dictionary do
   @southern_order [
                     :australia_wide,
                     :no_region,
-                    :southern,
-                    :northern
+                    :southern_dialect,
+                    :northern_dialect
                   ] ++
                     @southern_states ++
                     @northern_states
   @northern_order [
                     :australia_wide,
                     :no_region,
-                    :northern,
-                    :southern
+                    :northern_dialect,
+                    :southern_dialect
                   ] ++
                     @northern_states ++
                     @southern_states
 
-  defp sort_order(:northern), do: @northern_order
-  defp sort_order(:southern), do: @southern_order
+  defp sort_order(:northern_dialect), do: @northern_order
+  defp sort_order(:southern_dialect), do: @southern_order
   defp sort_order(_), do: @default_order
 
   @doc """
