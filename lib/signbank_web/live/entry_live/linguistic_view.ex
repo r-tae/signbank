@@ -12,7 +12,7 @@ defmodule SignbankWeb.SignLive.LinguisticView do
   @impl true
   def handle_params(%{"id" => id_gloss}, _, socket) do
     sign = Dictionary.get_sign_by_id_gloss!(id_gloss)
-    %{previous: previous, next: next} = Dictionary.get_prev_next_signs(sign)
+    %{previous: previous, next: next} = Dictionary.get_prev_next_signs!(sign)
 
     {:noreply,
      socket

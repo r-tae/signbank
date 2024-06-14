@@ -205,7 +205,7 @@ defmodule Signbank.Dictionary do
   @doc """
   Finds next and previous Signs in predefined sorting order.
   """
-  def get_prev_next_signs(%Sign{id: id}) do
+  def get_prev_next_signs!(%Sign{id: id}) do
     Repo.one!(
       from so in "sign_order",
         left_join: p in Sign,
@@ -214,6 +214,47 @@ defmodule Signbank.Dictionary do
         on: [id: so.next],
         where: so.sign_id == ^id,
         select: %{previous: p, next: n}
+    )
+  end
+
+  @doc """
+  Returns only the fields relevant for sorting for signs with the given ID glosses.
+  """
+  def debug_sign_order!(id_gloss) when is_binary(id_gloss), do: debug_sign_order!([id_gloss])
+  def debug_sign_order!(id_glosses)
+      when is_list(id_glosses) do
+    Repo.all(
+      from s in Sign,
+        where: s.id_gloss in ^id_glosses,
+        select: %{
+          a_subordinate_initial_handshape:
+            fragment("phonology->>?", "subordinate_initial_handshape"),
+          b_dominant_initial_finger_hand_orientation:
+            fragment("phonology->>?", "dominant_initial_finger_hand_orientation"),
+          c_subordinate_initial_handshape:
+            fragment("phonology->>?", "subordinate_initial_handshape"),
+          d_initial_primary_location: fragment("phonology->>?", "initial_primary_location"),
+          e_dominant_initial_palm_orientation:
+            fragment("phonology->>?", "dominant_initial_palm_orientation"),
+          f_subordinate_initial_finger_hand_orientation:
+            fragment("phonology->>?", "subordinate_initial_finger_hand_orientation"),
+          g_subordinate_initial_palm_orientation:
+            fragment("phonology->>?", "subordinate_initial_palm_orientation"),
+          h_dominant_final_finger_hand_orientation:
+            fragment("phonology->>?", "dominant_final_finger_hand_orientation"),
+          i_dominant_initial_interacting_handpart:
+            fragment("phonology->>?", "dominant_initial_interacting_handpart"),
+          j_subordinate_initial_interacting_handpart:
+            fragment("phonology->>?", "subordinate_initial_interacting_handpart"),
+          k_movement_direction: fragment("phonology->>?", "movement_direction"),
+          l_movement_path: fragment("phonology->>?", "movement_path"),
+          m_movement_repeated: fragment("phonology->>?", "movement_repeated"),
+          n_dominant_final_handshape: fragment("phonology->>?", "dominant_final_handshape"),
+          o_dominant_final_handshape: fragment("phonology->>?", "dominant_final_handshape"),
+          p_compound_of: fragment("morphology->>?", "compound_of"),
+          q_sense_number: s.sense_number,
+          r_id_gloss: s.id_gloss
+        }
     )
   end
 
