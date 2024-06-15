@@ -366,7 +366,7 @@
       </div>
     </details>
 
-    <.definitions type={:linguistic} definitions={@sign.definitions} />
+    <.definitions type={:linguistic} user={@current_user} definitions={@sign.definitions} />
 
     <p
       :if={@sign.type == :citation and Enum.count(@sign.variants) > 0}
@@ -391,8 +391,5 @@
         </.link>
       </div>
     </p>
-
-    <%!-- TODO: just navigate back? --%>
-    <.back navigate={~p"/dictionary"}>Back to signs</.back>
   </div>
 </div>

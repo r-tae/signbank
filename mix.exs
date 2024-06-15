@@ -24,7 +24,7 @@ defmodule Signbank.MixProject do
   def application do
     [
       mod: {Signbank.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end
 
@@ -37,6 +37,7 @@ defmodule Signbank.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.11"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.10"},
@@ -44,7 +45,7 @@ defmodule Signbank.MixProject do
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.20.2"},
-      {:floki, ">= 0.30.0", only: :test},
+      {:floki, ">= 0.30.0"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:swoosh, "~> 1.5"},
       {:finch, "~> 0.13"},
@@ -65,7 +66,9 @@ defmodule Signbank.MixProject do
       {:scrivener_ecto, "~> 2.7"},
       {:ex_cldr, "~> 2.38"},
       {:ex_cldr_lists, "~> 2.11"},
-      {:heroicons, "~> 0.5.5"}
+      {:heroicons, "~> 0.5.5"},
+      # Enables monitoring Ecto from the dashboard
+      {:ecto_psql_extras, "~> 0.7"}
     ]
   end
 

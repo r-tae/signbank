@@ -34,7 +34,7 @@ defmodule Signbank.Dictionary.Definition do
     field :published, :boolean, default: false
     # TODO: add video relation
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

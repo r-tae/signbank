@@ -221,6 +221,7 @@ defmodule Signbank.Dictionary do
   Returns only the fields relevant for sorting for signs with the given ID glosses.
   """
   def debug_sign_order!(id_gloss) when is_binary(id_gloss), do: debug_sign_order!([id_gloss])
+
   def debug_sign_order!(id_glosses)
       when is_list(id_glosses) do
     Repo.all(

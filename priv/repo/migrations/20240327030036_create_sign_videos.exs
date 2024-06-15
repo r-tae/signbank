@@ -8,7 +8,7 @@ defmodule Signbank.Repo.Migrations.CreateSignVideos do
       add :sign_id,
           references(:signs, on_delete: :nothing)
 
-      timestamps()
+      timestamps(type: :utc_datetime)
     end
 
     alter table(:signs) do

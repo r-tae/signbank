@@ -22,7 +22,7 @@ defmodule Signbank.Dictionary.SignRegion do
         :tasmania
       ]
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

@@ -18,6 +18,7 @@ defmodule SignbankWeb.CoreComponents do
 
   import SignbankWeb.Gettext
   alias Phoenix.LiveView.JS
+  alias Signbank.Accounts
 
   @doc """
   Renders a modal.
@@ -684,21 +685,9 @@ defmodule SignbankWeb.CoreComponents do
     :editor_note
   ]
 
-  @basic_definitions [
-    :general,
-    :auslan,
-    :noun,
-    :verb,
-    :modifier,
-    :augment,
-    :deictic,
-    :question,
-    :interactive,
-    :note
+  @editor_definitions [
+    :editor_note
   ]
-
-  defp only_basic_definitions({role, _defs}) when role in @basic_definitions, do: true
-  defp only_basic_definitions(_), do: false
 
   defp group_definitions_by_role(definitions) do
     definitions
@@ -707,7 +696,7 @@ defmodule SignbankWeb.CoreComponents do
     |> Enum.sort_by(fn {role, _defs} ->
       Enum.find_index(
         @role_order,
-        fn x -> x == role end
+        &(&1 == role)
       )
     end)
   end
@@ -721,38 +710,50 @@ defmodule SignbankWeb.CoreComponents do
   defp definition_role_to_string(:deictic), do: SignbankWeb.Gettext.gettext("As a Pointing Sign")
   defp definition_role_to_string(:question), do: SignbankWeb.Gettext.gettext("As a question")
   defp definition_role_to_string(:interactive), do: SignbankWeb.Gettext.gettext("Interactive")
-
   defp definition_role_to_string(:note), do: SignbankWeb.Gettext.gettext("Note")
   defp definition_role_to_string(:editor_note), do: SignbankWeb.Gettext.gettext("Editor note")
 
   attr :type, :atom, values: [:basic, :linguistic], required: true
   attr :definitions, :list, required: true
+  attr :user, User, required: false
 
   def definitions(assigns) do
-    definition_groups = group_definitions_by_role(assigns.definitions)
+    filter_unpublished = fn def ->
+      if Accounts.can_see_unpublished?(assigns[:user]), do: true, else: def.published
+    end
+
+    filter_editor_defs = fn {role, _defs} ->
+      if Accounts.can_see_unpublished?(assigns[:user]) do
+        true
+      else
+        # to prevent new roles defaulting to being shown
+        role in @role_order and
+          role not in @editor_definitions
+      end
+    end
 
     assigns =
       assign(
         assigns,
         :def_groups,
-        if(assigns.type == :basic,
-          do: Enum.filter(definition_groups, &only_basic_definitions/1),
-          else: definition_groups
-        )
+        assigns.definitions
+        |> Enum.filter(filter_unpublished)
+        |> group_definitions_by_role()
+        |> Enum.filter(filter_editor_defs)
       )
 
     ~H"""
     <div class="definitions">
-      <%= for {role, definitions} <- @def_groups do %>
-        <div class="definition">
-          <div class="definition__role"><%= definition_role_to_string(role) %></div>
-          <ol class="definition__senses">
-            <%= for definition <- definitions do %>
-              <li><%= definition.text %></li>
-            <% end %>
-          </ol>
+      <div :for={{role, definitions} <- @def_groups} class="definition">
+        <div class="definition__role">
+          <%= definition_role_to_string(role) %>
         </div>
-      <% end %>
+        <ol class="definition__senses">
+          <li :for={definition <- definitions}>
+            <Heroicons.eye_slash :if={not definition.published} class="icon--small" /><%= definition.text %>
+          </li>
+        </ol>
+      </div>
     </div>
     """
   end

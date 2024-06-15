@@ -4,6 +4,8 @@ defmodule SignbankWeb.SignLive.LinguisticView do
   import SignbankWeb.Gettext
   alias Signbank.Dictionary
 
+  on_mount {SignbankWeb.UserAuth, :mount_current_user}
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok, socket}

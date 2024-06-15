@@ -80,7 +80,7 @@ defmodule Signbank.Dictionary.Sign do
 
     field :crude, :boolean
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   def changeset(sign, attrs) do
