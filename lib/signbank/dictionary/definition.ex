@@ -19,7 +19,7 @@ defmodule Signbank.Dictionary.Definition do
         :verb,
         :modifier,
         :augment,
-        :deictic,
+        :pointing_sign,
         :question,
         :interactive,
         :popular_explanation,
