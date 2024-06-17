@@ -1,3 +1,5 @@
+> ## This repository has been archived, the Signbank source code has moved to https://github.com/Gesture-and-Sign-Corpus-of-Australia/signbank/
+
 # Signbank
 
 To start signbank:
